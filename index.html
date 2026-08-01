@@ -3,31 +3,372 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jinistickerbook</title>
+  <title>jini stickerbook — for artists</title>
+  <meta name="description" content="An iMessage sticker app for independent artists. Keep 80% of net revenue, own your art, leave anytime." />
+  <meta name="theme-color" content="#F9F5ED" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="jini stickerbook — for artists" />
+  <meta property="og:description" content="Your art, as iMessage stickers. Keep 80%. Your IP, leave anytime." />
+  <meta property="og:url" content="https://jinistickerbook.com/" />
+  <meta property="og:image" content="https://jinistickerbook.com/assets/jini_logo_3_1024_full.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Square, transparent-padded copy of the logo — a rectangular source gets
+       stretched into the browser's square tab slot. -->
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/jini_logo_3_1024_full.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="assets/fonts/PhrenSans-Rg.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
+  <noscript>
+    <style>
+      .reveal,
+      [data-stagger] > * { opacity: 1 !important; transform: none !important; }
+    </style>
+  </noscript>
 </head>
 <body>
-  <div class="wrap">
-    <header class="site">
-      <a class="wordmark" href="/">
-        <img src="assets/jini_message_logo.png" alt="" />
+
+  <header class="topbar" id="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="/">
+        <img src="assets/jini_logo_3.png" alt="" />
         <span>jini stickerbook</span>
       </a>
-    </header>
-
-    <div class="center">
-      <p class="lede">A sticker book to give messaging a little more character. A platform for artists to share and earn from their work.</p>
-      <p>Artists — <a href="https://tally.so/r/RGl8Lp" target="_blank" rel="noopener">apply here</a></p>
-
-      <hr class="dotted" />
-
-      <p><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Service</a></p>
+      <nav class="topbar__nav" aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#deal">Terms</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn--primary btn--sm" href="#apply">Get in touch</a>
     </div>
+  </header>
 
-    <footer class="site">
-      <p>© <span id="year">2026</span> jinistickerbook · <a href="mailto:hello@jinistickerbook.com">hello@jinistickerbook.com</a></p>
-    </footer>
-  </div>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__title">
+          <img class="hero__icon" src="assets/jini_logo_3_1024_full.png" alt="" />
+          <h1>Say it with stickers.</h1>
+        </div>
+
+        <p class="lede">Original hand-drawn stickers by independent artists, straight to your conversations.</p>
+
+        <div class="cta-row">
+          <!-- TODO: swap href="#" for your App Store URL. Badge artwork is Apple's, used unmodified. -->
+          <a class="store-badge" href="#" aria-label="Download on the App Store">
+            <img src="assets/app-store-badge.svg" alt="Download on the App Store" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section band" id="about">
+      <div class="container container--narrow" data-stagger>
+        <p class="eyebrow">About</p>
+        <h2>Built for artists.</h2>
+        <div class="prose">
+          <p>Hi, I'm Jini.</p>
+          <p>I'm an artist, and I built jini stickerbook to give independent artists a place to share their stickers and earn from their work.</p>
+          <p>Many sticker apps don't pay creators at all and block users behind a subscription paywall. We wanted to build something that works for both sides: artists get paid for what they make, and people get stickers they actually connect with.</p>
+        </div>
+
+        <p class="eyebrow eyebrow--restart">Why list with us</p>
+        <h2>Your art, in everyday conversations.</h2>
+        <div class="prose">
+          <ul>
+            <li><strong>Distribution.</strong> Messaging is one of the best ways art travels. Every sticker sent puts your work in front of someone new.</li>
+            <li><strong>No cost, no setup.</strong> We handle the file prep, the store listing, payments, and payouts. You send the art.</li>
+            <li><strong>A way to earn.</strong> A pack you finish once keeps selling and keeps paying, with no restocking or reposting.</li>
+            <li><strong>A real connection to your fans.</strong> Supporters don't just buy your work, they use it every day.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SEE IT IN ACTION ============ -->
+    <section class="section" id="proof">
+      <div class="container">
+        <div class="section-head section-head--flush" data-stagger="130">
+          <p class="eyebrow">See it in action</p>
+          <h2>A few taps from your art to someone's conversation.</h2>
+        </div>
+
+        <!--
+          TODO — replace each .shot__placeholder with the real media:
+            <img src="assets/proof-send.png" alt="Sending a jini sticker in an iMessage conversation" />
+            <video src="assets/proof-send.mp4" autoplay loop muted playsinline></video>
+          Portrait iPhone captures (9:19.5), under ~3 MB each.
+        -->
+        <ol class="features">
+          <li class="feature" data-stagger="160">
+            <div class="feature__copy">
+              <span class="feature__num" aria-hidden="true">01</span>
+              <h3>Your pack goes on sale</h3>
+              <p>Once you're onboarded, your set is listed in the jini stickerbook app for anyone to buy.</p>
+            </div>
+            <div class="feature__media">
+              <div class="shot">
+                <div class="shot__placeholder">
+                  <span class="display">Pack detail</span>
+                  <span>assets/proof-pack</span>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="feature feature--flip" data-stagger="160">
+            <div class="feature__copy">
+              <span class="feature__num" aria-hidden="true">02</span>
+              <h3>In their drawer, in every chat</h3>
+              <p>When someone buys your pack, your stickers land in their Messages drawer. One tap to send.</p>
+            </div>
+            <div class="feature__media">
+              <div class="shot">
+                <div class="shot__placeholder">
+                  <span class="display">Sending a sticker</span>
+                  <span>assets/proof-send</span>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="feature" data-stagger="160">
+            <div class="feature__copy">
+              <span class="feature__num" aria-hidden="true">03</span>
+              <h3>A page that's yours</h3>
+              <p>Your name, your bio, links to wherever you want people to find you, and a way for them to tip.</p>
+            </div>
+            <div class="feature__media">
+              <div class="shot">
+                <div class="shot__placeholder">
+                  <span class="display">Artist page</span>
+                  <span>assets/proof-artist</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="section band" id="how">
+      <div class="container container--narrow">
+        <div class="section-head" data-stagger="130">
+          <p class="eyebrow">How it works</p>
+          <h2>Four steps, and we do the tedious ones.</h2>
+        </div>
+
+        <ol class="steps" data-stagger="100">
+          <li>
+            <h3>Get in touch</h3>
+            <!-- APPLY LINK (1 of 2). While onboarding by hand, these point at email.
+                 To switch back to the Tally form, swap the href on both for
+                 https://tally.so/r/RGl8Lp and add target="_blank" rel="noopener". -->
+            <p>Send us a <a href="mailto:hello@jinistickerbook.com?subject=I%27d%20like%20to%20be%20an%20artist">DM or an email</a> with a link to your work.</p>
+          </li>
+          <li>
+            <h3>We talk</h3>
+            <p>You'll hear back from us with more information.</p>
+          </li>
+          <li>
+            <h3>Send your stickers</h3>
+            <p>In any size or format, animated or static.</p>
+          </li>
+          <li>
+            <h3>We prep and ship</h3>
+            <p>We cut the files to Apple's sticker spec, it goes live with your name on it.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ THE DEAL ============ -->
+    <section class="section" id="deal">
+      <div class="container">
+        <div class="section-head" data-stagger="130">
+          <p class="eyebrow">Terms</p>
+          <h2>You keep the art, and most of the money.</h2>
+        </div>
+
+        <dl class="termlist" data-stagger="55">
+          <div>
+            <dt>Costs you nothing</dt>
+            <dd>No signup fee, no monthly cost.</dd>
+          </div>
+          <div>
+            <dt>80/20 split</dt>
+            <dd>You keep 80% of the net revenue on every pack of yours that sells. Our 20% covers running the app.</dd>
+          </div>
+          <div>
+            <dt>You set the price</dt>
+            <dd>Free, $0.99, $1.99. Your call.</dd>
+          </div>
+          <div>
+            <dt>Paid monthly</dt>
+            <dd>One payout a month, with a statement of what sold.</dd>
+          </div>
+          <div>
+            <dt>You approve everything</dt>
+            <dd>Nothing ships until you've signed off on it.</dd>
+          </div>
+          <div>
+            <dt>Leave anytime</dt>
+            <dd>Email or DM us and we pull your packs. No notice, no penalty.</dd>
+          </div>
+          <div>
+            <dt>Tips are 100% yours</dt>
+            <dd>Supporters can tip you. We take nothing from it.</dd>
+          </div>
+          <div>
+            <dt>You keep your IP</dt>
+            <dd>You own the art. We license it as stickers only, and only while you're here.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section band" id="faq">
+      <div class="container container--narrow">
+        <div class="section-head" data-stagger="130">
+          <p class="eyebrow">FAQ</p>
+          <h2>The questions we'd ask too.</h2>
+        </div>
+
+        <div class="faq" data-stagger="55">
+          <details>
+            <summary>How much can I expect to make?</summary>
+            <div class="faq__body">
+              <p>Honestly, we don't know yet. We're new and still building an audience. That's why the split favors you, and why you can leave whenever you want.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>What does 80% of net revenue mean?</summary>
+            <div class="faq__body">
+              <p>Net revenue is what's left after Apple takes its cut of every sale (15%). You get 80% of that. On a $1.99 pack it works out to about $1.35 to you.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Why do you take 20%?</summary>
+            <div class="faq__body">
+              <p>It covers the cost of running the app: building it, hosting the sticker files, and Apple's developer fees.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Can I list my stickers for free?</summary>
+            <div class="faq__body">
+              <p>Yes, and we encourage it! A free pack is one of the best ways to connect with your supporters and get your work into people's everyday conversations. We make nothing on free packs, and we don't use your art for any other purpose.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>How do I get paid?</summary>
+            <div class="faq__body">
+              <p>Payouts run through PayPal monthly. We're setting up the payment and agreement paperwork now, artists will get both before anything of theirs goes on sale.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>What files do you need?</summary>
+            <div class="faq__body">
+              <p>Any size, any format. Send what you already have and we'll resize and compress it to fit Apple's sticker spec. We prefer square PNGs or APNGs with transparent backgrounds, but anything works.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Can I do animated stickers?</summary>
+            <div class="faq__body">
+              <p>Yes. Send the frames or the source file and we'll handle the export.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>What if I want out?</summary>
+            <div class="faq__body">
+              <p>Email or DM us and your packs come down. People who already bought one keep it, and you're still paid for sales made before you left.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Is my art safe with you?</summary>
+            <div class="faq__body">
+              <p>Your files are used to build your sticker packs and nothing else — no sublicensing, no reselling, no model training.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLY ============ -->
+    <section class="section section--tight" id="apply">
+      <div class="container">
+        <div class="apply" data-stagger="100">
+          <h2>Want in?</h2>
+          <p class="lede prose-center">Send a link to your work. That's all we need to start.</p>
+          <div class="btn-row btn-row--center">
+            <!-- APPLY LINK (2 of 2) — see note in the "How it works" step above. -->
+            <a class="btn btn--primary btn--lg" href="mailto:hello@jinistickerbook.com?subject=My%20work">Email us</a>
+            <a class="btn btn--lg" href="https://instagram.com/jini.stickerbook" target="_blank" rel="noopener">DM us on Instagram</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <p>© <span id="year">2026</span> jinistickerbook</p>
+        <nav aria-label="Site">
+          <a href="mailto:hello@jinistickerbook.com">hello@jinistickerbook.com</a>
+          <a href="https://instagram.com/jini.stickerbook" target="_blank" rel="noopener">Instagram</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </nav>
+      </div>
+      <p class="footer__legal">App Store is a service mark of Apple Inc.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const topbar = document.getElementById('topbar');
+    const onScroll = () => topbar.classList.toggle('is-stuck', window.scrollY > 8);
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+
+    document.querySelectorAll('[data-stagger]').forEach((group) => {
+      const step = Number(group.dataset.stagger) || 70;
+      Array.from(group.children).forEach((child, i) => {
+        child.style.transitionDelay = Math.min(i, 6) * step + 'ms';
+      });
+    });
+
+    const reveals = document.querySelectorAll('.reveal, [data-stagger] > *');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      reveals.forEach((el) => el.classList.add('is-in'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      reveals.forEach((el) => io.observe(el));
+    }
+  </script>
 </body>
 </html>

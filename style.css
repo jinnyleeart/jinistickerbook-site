@@ -1,115 +1,803 @@
-/* jinistickerbook — shared styles. Palette + type mirror the app's DesignSystem.swift. */
+/* jinistickerbook — shared styles. Palette + display type mirror the app's DesignSystem.swift. */
 @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&display=swap');
 
+/* Phren Sans, self-hosted. Only the three weights the site uses. */
+@font-face {
+  font-family: 'Phren Sans';
+  src: url('assets/fonts/PhrenSans-Rg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Phren Sans';
+  src: url('assets/fonts/PhrenSans-Md.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Phren Sans';
+  src: url('assets/fonts/PhrenSans-Sm.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --app-background: #F9F5ED;
-  --app-gray: #575757;
-  --card-background: #FFFEF9;
-  --divider: #ECEAE4;
-  --green: #84B06E;
-  --green-outline: #4A6B3A;
-  --max-width: 720px;
+  /* Pulled from DesignSystem.swift */
+  --paper: #F9F5ED;
+  --card: #FFFEF9;
+  --ink: #575757;
+
+  /* Web-only extensions of the app palette. No accent colour —
+     hierarchy comes from ink weight, hairlines, and space. */
+  --ink-strong: #3E3E3E;
+  --ink-soft: #78756E;
+  --ink-faint: #938F87;
+  --line: #E2DDD0;
+
+  --display: 'Gaegu', 'Bradley Hand', cursive;
+  --sans: 'Phren Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  --max-width: 720px;   /* legal pages */
+  --container: 1020px;  /* landing page */
 }
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 body {
   margin: 0;
-  background: var(--app-background);
-  color: var(--app-gray);
-  font-family: 'Gaegu', system-ui, -apple-system, sans-serif;
-  font-size: 20px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
   line-height: 1.65;
-  padding: 0 18px;
+  -webkit-font-smoothing: antialiased;
 }
+
+::selection { background: var(--ink-strong); color: var(--card); }
+
+/* ---------- Type ---------- */
+
+h1, h2, h3, .display {
+  font-family: var(--display);
+  color: var(--ink-strong);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  font-size: clamp(38px, 5.4vw, 56px);
+  line-height: 1.04;
+  margin: 0 0 18px;
+}
+
+h2 {
+  font-size: clamp(28px, 4vw, 36px);
+  line-height: 1.1;
+  margin: 0;
+}
+
+h3 {
+  font-size: 21px;
+  line-height: 1.2;
+  margin: 0 0 5px;
+}
+
+p, li { margin: 0 0 12px; }
+p:last-child, li:last-child { margin-bottom: 0; }
+ul { padding-left: 20px; }
+strong { color: var(--ink-strong); font-weight: 600; }
+
+a {
+  color: var(--ink-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover { color: var(--ink-soft); }
+
+:focus-visible {
+  outline: 2.5px solid var(--ink-strong);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 12px;
+}
+
+.lede {
+  font-size: clamp(18px, 2vw, 20px);
+  line-height: 1.55;
+  max-width: 46ch;
+}
+
+/* Starts a second block inside one section — enough air to read as its own
+   beat, but less than the gap between two full sections. */
+.eyebrow--restart { margin-top: clamp(48px, 6vw, 76px); }
+
+.prose { max-width: 62ch; }
+.prose p + p { margin-top: 14px; }
+h2 + .prose { margin-top: 18px; }
+.prose-center { margin-left: auto; margin-right: auto; }
+
+.prose ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Hanging bullet, so the wrapped lines align under the text and not the marker. */
+.prose ul li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.prose ul li + li { margin-top: 12px; }
+
+.prose ul li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+}
+
+.prose ul strong {
+  font-weight: 600;
+  color: var(--ink-strong);
+}
+
+/* ---------- Layout ---------- */
+
+.container {
+  width: min(var(--container), 100% - 40px);
+  margin-inline: auto;
+}
+
+/* Same gutters as .container, so every section shares one left edge —
+   the column inside is what narrows. */
+.container--narrow > * { max-width: 700px; }
+
+.section { padding: clamp(60px, 8vw, 100px) 0; }
+.section--tight { padding: clamp(44px, 5vw, 68px) 0; }
+
+/* Alternating band, one shade lighter than the page. */
+.band {
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.section-head { margin-bottom: clamp(28px, 4vw, 44px); }
+
+/* For heads that sit directly above a hairline-ruled list. */
+.section-head--flush { margin-bottom: clamp(10px, 1.5vw, 18px); }
+
+/* Dotted divider, echoes DottedDivider in the app. */
+.dotted {
+  border: none;
+  border-top: 2.25px dotted var(--line);
+  margin: 22px 0;
+}
+
+/* ---------- Site header ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(249, 245, 237, 0.82);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease;
+}
+
+.topbar.is-stuck { border-bottom-color: var(--line); }
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 11px 0;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink-strong);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 21px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  margin-right: auto;
+}
+
+.brand img { width: 32px; height: auto; display: block; }
+
+.topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  font-size: 15px;
+}
+
+.topbar__nav a { color: var(--ink-soft); text-decoration: none; }
+.topbar__nav a:hover { color: var(--ink-strong); }
+
+@media (max-width: 720px) {
+  .topbar__nav { display: none; }
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  padding: 14px 22px;
+  border: 1.5px solid var(--ink-strong);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink-strong);
+  transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+
+.btn:hover {
+  background: var(--ink-strong);
+  border-color: var(--ink-strong);
+  color: var(--card);
+}
+
+.btn--primary {
+  background: var(--ink-strong);
+  border-color: var(--ink-strong);
+  color: var(--card);
+}
+
+.btn--primary:hover {
+  background: #2A2A28;
+  border-color: #2A2A28;
+  color: var(--card);
+}
+
+.btn--sm { padding: 9px 15px; font-size: 14.5px; border-radius: 10px; }
+.btn--lg { padding: 16px 28px; }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn-row--center { justify-content: center; }
+
+@media (max-width: 460px) {
+  .btn-row { display: grid; gap: 10px; }
+  .btn-row .btn { width: 100%; }
+}
+
+/* ---------- App Store badge ----------
+   Apple artwork, used unmodified. Guidelines require a minimum onscreen height
+   of 40px and clear space of one quarter the badge height. */
+
+.store-badge {
+  display: inline-block;
+  line-height: 0;
+  border-radius: 9px;
+}
+
+.store-badge img {
+  height: 52px;
+  width: auto;
+  display: block;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 13px 16px;
+}
+
+.cta-row .btn { padding: 16px 22px; }
+
+/* Keep the badge at its native size, so the secondary CTA shouldn't stretch either. */
+@media (max-width: 460px) {
+  .cta-row { display: grid; justify-items: center; gap: 14px; }
+  .cta-row .btn { width: auto; }
+}
+
+/* ---------- Hero ---------- */
+
+.hero { padding: clamp(52px, 8vw, 96px) 0 clamp(56px, 7vw, 88px); }
+
+.hero__inner { text-align: center; }
+
+.hero__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2.2vw, 26px);
+  margin-bottom: 22px;
+}
+
+/* Rounded square, roughly Apple's icon corner ratio. */
+.hero__icon {
+  flex: none;
+  width: clamp(88px, 10.5vw, 124px);
+  aspect-ratio: 1;
+  border-radius: 22%;
+  display: block;
+}
+
+/* The headline is short, so it can carry more size. */
+.hero h1 { font-size: clamp(40px, 6vw, 68px); margin: 0; }
+.hero .lede { margin: 0 auto 32px; }
+.hero .cta-row { justify-content: center; }
+
+/* Icon above the headline once they no longer sit comfortably side by side.
+   Stacked, the icon can be larger and sit closer to the headline. */
+@media (max-width: 560px) {
+  .hero__title { flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .hero__icon { width: min(160px, 42vw); }
+}
+
+/* ---------- Screenshot / video frames (plain rectangles) ---------- */
+
+.shot {
+  width: 100%;
+  max-width: 290px;
+  aspect-ratio: 9 / 19.5;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--card);
+}
+
+.shot img,
+.shot video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.shot__placeholder {
+  width: 100%;
+  height: 100%;
+  border: 1.5px dashed var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  padding: 20px;
+}
+
+.shot__placeholder span { font-size: 13px; line-height: 1.5; color: var(--ink-faint); }
+.shot__placeholder .display { font-size: 22px; color: var(--ink-soft); }
+
+/* ---------- Feature rows (copy one side, screenshot the other) ---------- */
+
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.feature {
+  margin: 0;
+  padding: clamp(36px, 5vw, 60px) 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: clamp(28px, 4vw, 44px);
+  align-items: center;
+}
+
+.feature:last-child { border-bottom: 1px solid var(--line); }
+
+.feature__num {
+  display: block;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  margin-bottom: 14px;
+}
+
+.feature__copy h3 {
+  font-size: clamp(24px, 2.8vw, 30px);
+  line-height: 1.14;
+  margin-bottom: 12px;
+}
+
+.feature__copy p {
+  font-size: 16px;
+  line-height: 1.65;
+  max-width: 46ch;
+}
+
+/* Width lives on the grid item, so .shot's percentage width has something
+   definite to resolve against. */
+.feature__media {
+  justify-self: center;
+  width: 100%;
+  max-width: 252px;
+}
+
+.feature__media .shot { max-width: none; }
+
+@media (min-width: 820px) {
+  .feature { grid-template-columns: minmax(0, 1fr) minmax(0, 330px); column-gap: clamp(40px, 5vw, 72px); }
+
+  /* Even rows mirror, so the screenshots zig-zag down the page. */
+  .feature--flip { grid-template-columns: minmax(0, 330px) minmax(0, 1fr); }
+  .feature--flip .feature__media { grid-column: 1; grid-row: 1; }
+  .feature--flip .feature__copy { grid-column: 2; grid-row: 1; }
+}
+
+/* ---------- The deal ---------- */
+
+.deal { display: grid; gap: clamp(30px, 4vw, 40px); align-items: center; }
+
+@media (min-width: 840px) {
+  .deal { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); column-gap: clamp(40px, 6vw, 72px); }
+}
+
+.split__figures {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.split__you { font-size: clamp(62px, 9vw, 92px); color: var(--ink-strong); }
+.split__slash { font-size: clamp(28px, 4.5vw, 40px); color: var(--line); }
+.split__us { font-size: clamp(32px, 5.5vw, 48px); color: var(--ink-faint); }
+
+.split__bar {
+  display: flex;
+  height: 12px;
+  max-width: 340px;
+  border: 1.5px solid var(--ink-strong);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 22px 0 12px;
+}
+
+.split__bar i { display: block; }
+.split__bar i:first-child { flex: 80; background: var(--ink); }
+.split__bar i:last-child {
+  flex: 20;
+  background: repeating-linear-gradient(-45deg, var(--line) 0 4px, var(--card) 4px 8px);
+}
+
+.split__legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 340px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.split__legend b { color: var(--ink-strong); font-weight: 600; }
+
+/* ---------- Terms list ---------- */
+
+.termlist { margin: clamp(40px, 5vw, 60px) 0 0; }
+
+.termlist > div {
+  display: grid;
+  gap: 2px 32px;
+  padding: 15px 0;
+  border-top: 1px solid var(--line);
+}
+
+.termlist > div:last-child { border-bottom: 1px solid var(--line); }
+
+@media (min-width: 620px) {
+  .termlist > div { grid-template-columns: 210px minmax(0, 1fr); align-items: baseline; }
+}
+
+.termlist dt {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-strong);
+  line-height: 1.25;
+}
+
+.termlist dd { margin: 0; font-size: 15.5px; line-height: 1.55; }
+
+/* ---------- Steps ---------- */
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+  margin: 0;
+}
+
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 26px 50px;
+  margin: 0;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-strong);
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.steps li::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 38px;
+  bottom: 4px;
+  border-left: 2.25px dotted var(--line);
+}
+
+.steps li:last-child { padding-bottom: 0; }
+.steps li:last-child::after { display: none; }
+
+.steps p { font-size: 15.5px; }
+
+/* Plain-spoken aside under a section. */
+.note {
+  margin: clamp(30px, 4vw, 44px) 0 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* ---------- FAQ ---------- */
+
+.faq details { border-bottom: 1px solid var(--line); }
+.faq details:first-of-type { border-top: 1px solid var(--line); }
+
+.faq summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 2px;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-strong);
+  line-height: 1.25;
+}
+
+.faq summary::-webkit-details-marker { display: none; }
+
+.faq summary::after {
+  content: '';
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-top: 7px;
+  background:
+    linear-gradient(var(--ink-soft), var(--ink-soft)) center/12px 1.5px no-repeat,
+    linear-gradient(var(--ink-soft), var(--ink-soft)) center/1.5px 12px no-repeat;
+  transition: transform 0.2s ease;
+}
+
+.faq details[open] summary::after {
+  background: linear-gradient(var(--ink-soft), var(--ink-soft)) center/12px 1.5px no-repeat;
+  transform: rotate(180deg);
+}
+
+.faq summary:hover { color: var(--ink); }
+
+.faq__body {
+  padding: 0 38px 20px 2px;
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+/* ---------- Apply ---------- */
+
+.apply { text-align: center; }
+.apply h2 { margin-bottom: 12px; }
+.apply .lede { margin-bottom: 26px; }
+
+/* ---------- Footer ---------- */
+
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 32px 0 40px;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer p { margin: 0; }
+.footer a { color: var(--ink-soft); }
+.footer a:hover { color: var(--ink-strong); }
+.footer nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+
+.footer__legal {
+  margin-top: 20px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+/* ---------- Scroll reveal ----------
+   .reveal animates as one block. [data-stagger] animates its direct children
+   in sequence; the step between them is set per group in the page script.
+   Distance, duration and direction are tunable through the --rev-* properties,
+   which inherit down into a section. */
+
+.reveal,
+[data-stagger] > * {
+  opacity: 0;
+  transform: translate3d(var(--rev-x, 0px), var(--rev-y, 14px), 0);
+  transition:
+    opacity var(--rev-dur, 0.6s) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--rev-dur, 0.6s) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-in,
+[data-stagger] > .is-in { opacity: 1; transform: none; }
+
+/* The screenshot showcase travels furthest — it's the one section where the
+   motion is part of the point. */
+#proof {
+  --rev-y: 38px;
+  --rev-dur: 0.85s;
+}
+
+/* The text sections sit between that and the quiet hero default. */
+#how,
+#deal,
+#faq,
+#apply {
+  --rev-y: 22px;
+  --rev-dur: 0.7s;
+}
+
+/* Screenshots come in sideways, from the outer edge of their own column. */
+@media (min-width: 820px) {
+  .feature__media { --rev-x: 52px; --rev-y: 0px; }
+  .feature--flip .feature__media { --rev-x: -52px; }
+}
+
+/* ---------- Hero entrance ---------- */
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__icon,
+  .hero h1,
+  .hero .lede,
+  .hero .cta-row {
+    animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .hero__icon { animation-delay: 0.06s; }
+  .hero h1 { animation-delay: 0.16s; }
+  .hero .lede { animation-delay: 0.26s; }
+  .hero .cta-row { animation-delay: 0.34s; }
+
+  .faq details[open] .faq__body { animation: fade-in 0.3s ease; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  [data-stagger] > * { opacity: 1; transform: none; transition: none; }
+  .btn { transition: none; }
+}
+
+/* ---------- Legal pages (privacy.html, terms.html) ---------- */
 
 .wrap {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 48px 0 80px;
+  padding: 48px 18px 80px;
 }
 
-/* Wordmark: the in-app logo above a single line of type. */
 .wordmark {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  font-family: var(--display);
   font-weight: 700;
-  font-size: 34px;
+  font-size: 30px;
   line-height: 1.05;
   letter-spacing: 0.08em;
   text-decoration: none;
-  color: var(--app-gray);
+  color: var(--ink-strong);
 }
+
 .wordmark img {
-  width: 220px;
-  max-width: 70vw;
+  width: 160px;
+  max-width: 55vw;
   height: auto;
   display: block;
 }
 
-header.site {
-  text-align: center;
-  padding: 24px 0 40px;
-}
+header.site { text-align: center; padding: 16px 0 44px; }
 
-h1 { font-weight: 700; font-size: 30px; margin: 0 0 4px; }
-h2 { font-weight: 700; font-size: 24px; margin: 40px 0 8px; }
-h3 { font-weight: 700; font-size: 20px; margin: 28px 0 4px; }
+.wrap h2 { font-size: 25px; margin: 38px 0 8px; }
+.wrap h3 { font-size: 20px; margin: 26px 0 4px; }
 
-p, li { margin: 0 0 14px; }
-ul { padding-left: 22px; }
-
-a { color: var(--green-outline); text-decoration: underline; }
-
-/* Intro blurb under the wordmark. */
-.lede {
-  font-size: 24px;
-  max-width: 30ch;
-  margin: 0 auto 18px;
-}
-
-.muted { opacity: 0.7; }
-.meta { font-size: 16px; opacity: 0.7; margin-bottom: 32px; }
-
-/* Hand-drawn-ish card, echoes HandDrawnRoundedRectangle. */
-.card {
-  background: var(--card-background);
-  border: 2px solid var(--app-gray);
-  border-radius: 16px;
-  padding: 28px 26px;
-  margin: 24px 0;
-}
-
-/* Dotted divider, echoes DottedDivider. */
-.dotted {
-  border: none;
-  border-top: 2.25px dotted var(--divider);
-  margin: 36px 0;
-}
-
-.btn {
-  display: inline-block;
-  background: var(--card-background);
-  border: 2px solid var(--app-gray);
-  border-radius: 12px;
-  padding: 12px 26px;
-  color: var(--app-gray);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 20px;
-  margin: 8px 6px 0;
-}
+.meta { font-size: 15px; color: var(--ink-soft); margin-bottom: 30px; }
+.center { text-align: center; }
 
 footer.site {
   text-align: center;
-  font-size: 16px;
-  opacity: 0.7;
+  font-size: 14.5px;
+  color: var(--ink-soft);
   padding: 40px 0 8px;
 }
-footer.site a { color: var(--app-gray); }
 
-.center { text-align: center; }
+footer.site a { color: var(--ink-soft); }
