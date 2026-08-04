@@ -27,17 +27,21 @@
 }
 
 :root {
-  /* Pulled from DesignSystem.swift */
+  /* Surfaces, pulled from DesignSystem.swift. */
   --paper: #F9F5ED;
   --card: #FFFEF9;
-  --ink: #575757;
 
-  /* Web-only extensions of the app palette. No accent colour —
-     hierarchy comes from ink weight, hairlines, and space. */
-  --ink-strong: #3E3E3E;
-  --ink-soft: #78756E;
-  --ink-faint: #938F87;
+  /* Text ink. Warm grays rather than neutral: the paper is a cream, and a
+     pure-neutral gray reads faintly cold against it. These carry the same
+     undertone, so the type sits in the page instead of on top of it. */
+  --ink: #55504A;         /* body copy */
+  --ink-strong: #35322D;  /* headings, and the darker step under body */
+  --ink-soft: #7A736A;    /* muted captions, nav, footer */
+  --ink-faint: #9A9289;   /* bullets, step numbers, de-emphasised labels */
   --line: #E2DDD0;
+  /* Pressed/hover state of a filled button, and the tint of the screenshot shadow. */
+  --ink-press: #211F1C;
+  --shadow-rgb: 85, 80, 74;
 
   --display: 'Gaegu', 'Bradley Hand', cursive;
   --sans: 'Phren Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -45,6 +49,72 @@
   --max-width: 720px;   /* legal pages */
   --container: 1020px;  /* landing page */
 }
+
+/* Brand accent — #495C72, opted into per page.
+   Deliberately NOT applied to body copy or headings. This page is a document
+   people read at length, and neutral text reads better than tinted text; the
+   blue is worth more as punctuation than as the colour of everything. It lands
+   on the logo, links, buttons, eyebrows and step markers — small, structural,
+   repeated — so it signals "brand" and points at the CTAs instead of becoming
+   the page's default tone. */
+.theme-ink {
+  --accent: #495C72;        /* brand blue */
+  --accent-soft: #54667B;   /* lighter step, for link hover */
+  --accent-press: #3B4C60;  /* darker step, for filled-button hover */
+}
+
+/* Where the accent is allowed to land. Everything not listed here stays gray. */
+
+/* Links — the blue marks them as interactive, which gray underlines do weakly. */
+.theme-ink a { color: var(--accent); }
+.theme-ink a:hover { color: var(--accent-soft); }
+.theme-ink :focus-visible { outline-color: var(--accent); }
+
+/* Section eyebrows (ABOUT / TERMS / FAQ). Small, repeated, structural — they
+   read as brand marking the page's divisions rather than as coloured text. */
+.theme-ink .eyebrow { color: var(--accent); }
+
+/* Buttons: the primary CTA is the one thing on the page that should pull the
+   eye, so it carries the brand colour as a solid fill. */
+.theme-ink .btn {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.theme-ink .btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--card);
+}
+
+.theme-ink .btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--card);
+}
+
+.theme-ink .btn--primary:hover {
+  background: var(--accent-press);
+  border-color: var(--accent-press);
+  color: var(--card);
+}
+
+/* Numbered step markers — the circles, not the text beside them. */
+.theme-ink .steps li::before {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* The 80/20 split bar, the page's one piece of data viz. */
+.theme-ink .split__bar { border-color: var(--accent); }
+.theme-ink .split__bar i:first-child { background: var(--accent); }
+.theme-ink .split__you { color: var(--accent); }
+
+/* Hero brand name — matches the ink mark above it. */
+.theme-ink .hero h1 { color: var(--accent); }
+
+/* The hand-drawn rule under the title, in the same ink as the wordmark. */
+.theme-ink .hero__rule { color: var(--accent); }
 
 * { box-sizing: border-box; }
 
@@ -141,34 +211,27 @@ a:hover { color: var(--ink-soft); }
 h2 + .prose { margin-top: 18px; }
 .prose-center { margin-left: auto; margin-right: auto; }
 
-.prose ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* Stacked reasons under "Why list with us" — heading above, line below. */
+.reasons {
+  margin: 28px 0 0;
+  max-width: 42ch;
 }
 
-/* Hanging bullet, so the wrapped lines align under the text and not the marker. */
-.prose ul li {
-  position: relative;
-  padding-left: 22px;
-}
+.reasons > div + div { margin-top: 22px; }
 
-.prose ul li + li { margin-top: 12px; }
-
-.prose ul li::before {
-  content: "";
-  position: absolute;
-  left: 4px;
-  top: 0.62em;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--ink-faint);
-}
-
-.prose ul strong {
+.reasons dt {
+  font-family: var(--sans);
+  font-size: clamp(18px, 2.1vw, 20px);
   font-weight: 600;
   color: var(--ink-strong);
+  line-height: 1.25;
+  margin: 0 0 4px;
+}
+
+.reasons dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 /* ---------- Layout ---------- */
@@ -222,25 +285,12 @@ h2 + .prose { margin-top: 18px; }
 .topbar__inner {
   display: flex;
   align-items: center;
+  justify-content: flex-end;   /* nav + CTA sit right; the brand lockup that
+                                  used to hold the left edge is gone */
   gap: 20px;
   padding: 11px 0;
 }
 
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--ink-strong);
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 21px;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  margin-right: auto;
-}
-
-.brand img { width: 32px; height: auto; display: block; }
 
 .topbar__nav {
   display: flex;
@@ -289,8 +339,8 @@ h2 + .prose { margin-top: 18px; }
 }
 
 .btn--primary:hover {
-  background: #2A2A28;
-  border-color: #2A2A28;
+  background: var(--ink-press);
+  border-color: var(--ink-press);
   color: var(--card);
 }
 
@@ -305,19 +355,16 @@ h2 + .prose { margin-top: 18px; }
   .btn-row .btn { width: 100%; }
 }
 
-/* ---------- App Store badge ----------
-   Apple artwork, used unmodified. Guidelines require a minimum onscreen height
-   of 40px and clear space of one quarter the badge height. */
+/* ---------- App Store icon ---------- */
 
 .store-badge {
   display: inline-block;
   line-height: 0;
-  border-radius: 9px;
 }
 
 .store-badge img {
   height: 52px;
-  width: auto;
+  width: 52px;
   display: block;
 }
 
@@ -342,34 +389,74 @@ h2 + .prose { margin-top: 18px; }
 
 .hero__inner { text-align: center; }
 
+/* Mark above the wordmark at every width. Stacked reads as a lockup — the mark
+   gets the full column and can carry real size, rather than being capped by the
+   height of the headline sitting next to it. */
 .hero__title {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: clamp(16px, 2.2vw, 26px);
-  margin-bottom: 22px;
+  gap: clamp(24px, 2.6vw, 34px);
+  margin-bottom: 20px;
 }
 
-/* Rounded square, roughly Apple's icon corner ratio. */
+/* The transparent mark, not the packed app icon — it sits directly on the
+   paper, so it keeps its own proportions rather than filling a square. */
 .hero__icon {
   flex: none;
-  width: clamp(88px, 10.5vw, 124px);
-  aspect-ratio: 1;
-  border-radius: 22%;
+  width: clamp(150px, 15vw, 200px);
+  height: auto;
   display: block;
 }
 
-/* The headline is short, so it can carry more size. */
-.hero h1 { font-size: clamp(40px, 6vw, 68px); margin: 0; }
+/* Stacked, the headline has the full column, so it can run larger than it could
+   side by side without crowding the mark above it. */
+.hero h1 { font-size: clamp(46px, 6.4vw, 72px); margin: 0; }
 .hero .lede { margin: 0 auto 32px; }
 .hero .cta-row { justify-content: center; }
 
-/* Icon above the headline once they no longer sit comfortably side by side.
-   Stacked, the icon can be larger and sit closer to the headline. */
-@media (max-width: 560px) {
-  .hero__title { flex-direction: column; gap: 6px; margin-bottom: 16px; }
-  .hero__icon { width: min(160px, 42vw); }
+/* Sits under the mark + wordmark in place of a lede. Sized to roughly the width
+   of that pair rather than the full container, so it reads as underlining the
+   title instead of dividing the page. A fixed width, deliberately: the rule is a
+   piece of punctuation, so it holds one size at every viewport instead of
+   tracking vw. max-width keeps it inside the gutters on a very narrow screen. */
+.hero__rule {
+  display: block;
+  width: 280px;
+  max-width: 100%;
+  height: 6px;
+  margin: 0 auto 34px;
+  /* Ink comes from the theme block, alongside the wordmark's colour;
+     this is the untinted fallback for a page without .theme-ink. */
+  color: var(--ink-faint);
+  overflow: visible;
+}
+
+/* The lockup is stacked at every width, so this only retunes the vw-based sizes
+   for a narrower column — the layout itself no longer changes here. The vw
+   coefficients are picked to meet the desktop values at 760px, so nothing jumps
+   as the breakpoint is crossed. */
+@media (max-width: 760px) {
+  .hero__title { gap: clamp(24px, 5vw, 36px); }
+
+  /* Holds at the size the desktop rule hands over at 760px, so the mark stays
+     the anchor of the lockup as the column narrows rather than tracking vw down
+     into a stamp. The 480px block takes over once that crowds the gutters. */
+  .hero__icon { width: 150px; }
+
+  .hero h1 { font-size: clamp(46px, 6.4vw, 62px); }
+}
+
+/* On a phone the mark shrinks further — the headline is the thing that should
+   carry the hero, and a mark much past this starts eating the fold. */
+@media (max-width: 480px) {
+  .hero__icon { width: min(150px, 40vw); }
+  /* No lower bound: "jini stickerbook" is a long string in a display face, and a
+     floor here would push it past the gutters on a 320px screen. Capped at 46px
+     to meet the value the wider rule hands over at 480px. */
+  .hero h1 { font-size: min(12.5vw, 46px); }
 }
 
 /* ---------- Screenshot / video frames (plain rectangles) ---------- */
@@ -385,7 +472,7 @@ h2 + .prose { margin-top: 18px; }
   border-radius: 14px;
   overflow: hidden;
   background: var(--card);
-  box-shadow: 0 8px 24px rgba(87, 87, 87, 0.06);
+  box-shadow: 0 8px 24px rgba(var(--shadow-rgb), 0.06);
 }
 
 .shot img,
@@ -724,14 +811,14 @@ h2 + .prose { margin-top: 18px; }
 @media (prefers-reduced-motion: no-preference) {
   .hero__icon,
   .hero h1,
-  .hero .lede,
+  .hero__rule,
   .hero .cta-row {
     animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   }
 
   .hero__icon { animation-delay: 0.06s; }
   .hero h1 { animation-delay: 0.16s; }
-  .hero .lede { animation-delay: 0.26s; }
+  .hero__rule { animation-delay: 0.26s; }
   .hero .cta-row { animation-delay: 0.34s; }
 
   .faq details[open] .faq__body { animation: fade-in 0.3s ease; }

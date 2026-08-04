@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-ink">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,13 +11,13 @@
   <meta property="og:title" content="jini stickerbook" />
   <meta property="og:description" content="Original hand-drawn stickers by independent artists, straight to your conversations." />
   <meta property="og:url" content="https://jinistickerbook.com/" />
-  <meta property="og:image" content="https://jinistickerbook.com/assets/jini_logo_3_1024_full.png" />
+  <meta property="og:image" content="https://jinistickerbook.com/assets/jini_logo_3_495C72_1024.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Square, transparent-padded copy of the logo — a rectangular source gets
        stretched into the browser's square tab slot. -->
   <link rel="icon" href="assets/favicon.png" />
-  <link rel="apple-touch-icon" href="assets/jini_logo_3_1024_full.png" />
+  <link rel="apple-touch-icon" href="assets/jini_logo_3_495C72_1024.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" href="assets/fonts/PhrenSans-Rg.woff2" as="font" type="font/woff2" crossorigin />
@@ -33,10 +33,6 @@
 
   <header class="topbar" id="topbar">
     <div class="container topbar__inner">
-      <a class="brand" href="/">
-        <img src="assets/jini_logo_3.png" alt="" />
-        <span>jini stickerbook</span>
-      </a>
       <nav class="topbar__nav" aria-label="Sections">
         <a href="#about">About</a>
         <a href="#deal">Terms</a>
@@ -52,16 +48,27 @@
     <section class="hero">
       <div class="container hero__inner">
         <div class="hero__title">
-          <img class="hero__icon" src="assets/jini_logo_3_1024_full.png" alt="" />
-          <h1>Say it with stickers.</h1>
+          <img class="hero__icon" src="assets/jini_logo_3_ink_495C72.png" alt="" />
+          <h1>jini stickerbook</h1>
         </div>
 
-        <p class="lede">Original hand-drawn stickers by independent artists, straight to your conversations.</p>
+        <!-- Port of DottedDivider.swift: two dots, a hand-drawn wobbled line, two dots.
+             The path is the same curve the app generates (same seed, jitter 0.32,
+             6pt step), baked to a viewBox so it needs no script. -->
+        <svg class="hero__rule" viewBox="0 0 316 6" fill="none" aria-hidden="true" preserveAspectRatio="none">
+          <circle cx="2" cy="3" r="2" fill="currentColor" />
+          <circle cx="11" cy="3" r="2" fill="currentColor" />
+          <path d="M1.5 3.32Q7.5 3.34 10.5 3.01Q13.5 2.68 16.5 2.85Q19.5 3.02 22.5 2.95Q25.5 2.88 28.5 2.77Q31.5 2.66 34.5 2.8Q37.5 2.94 40.5 3.13Q43.5 3.33 46.5 3.23Q49.5 3.13 52.5 2.99Q55.5 2.86 58.5 2.71Q61.5 2.56 64.5 2.6Q67.5 2.63 70.5 2.81Q73.5 2.98 76.5 2.86Q79.5 2.75 82.5 2.66Q85.5 2.56 88.5 2.75Q91.5 2.94 94.5 3.19Q97.5 3.44 100.5 3.33Q103.5 3.21 106.5 2.97Q109.5 2.73 112.5 2.78Q115.5 2.84 118.5 2.83Q121.5 2.83 124.5 2.76Q127.5 2.7 130.5 2.83Q133.5 2.97 136.5 2.89Q139.5 2.81 142.5 2.97Q145.5 3.14 148.5 3.05Q151.5 2.96 154.5 2.8Q157.5 2.64 160.5 2.81Q163.5 2.97 166.5 2.9Q169.5 2.84 172.5 2.82Q175.5 2.8 178.5 2.94Q181.5 3.08 184.5 3.18Q187.5 3.27 190.5 3Q193.5 2.73 196.5 2.77Q199.5 2.8 202.5 2.98Q205.5 3.17 208.5 3.2Q211.5 3.23 214.5 3.31Q217.5 3.38 220.5 3.39Q223.5 3.4 226.5 3.17Q229.5 2.95 232.5 2.79Q235.5 2.64 238.5 2.8Q241.5 2.95 244.5 3.06Q247.5 3.17 250.5 3.2Q253.5 3.24 256.5 3.01Q259.5 2.78 262.5 3.05Q265.5 3.33 268.5 2.97Q271.5 2.6 274.5 2.89Q277.5 3.17 278 3.28L278.5 3.38"
+                transform="translate(18 0)" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+          <circle cx="305" cy="3" r="2" fill="currentColor" />
+          <circle cx="314" cy="3" r="2" fill="currentColor" />
+        </svg>
 
         <div class="cta-row">
-          <!-- TODO: swap href="#" for your App Store URL. Badge artwork is Apple's, used unmodified. -->
+          <!-- TODO: swap href="#" for your App Store URL. -->
           <a class="store-badge" href="#" aria-label="Download on the App Store">
-            <img src="assets/app-store-badge.svg" alt="Download on the App Store" />
+            <img src="assets/app-store-icon-495C72.png" alt="Download on the App Store" />
           </a>
         </div>
       </div>
@@ -80,14 +87,24 @@
 
         <p class="eyebrow eyebrow--restart">Why list with us</p>
         <h2>Your art, in everyday conversations.</h2>
-        <div class="prose">
-          <ul>
-            <li><strong>Distribution.</strong> Messaging is one of the best ways art travels. Every sticker sent puts your work in front of someone new.</li>
-            <li><strong>No cost, no setup.</strong> We handle the file prep, the store listing, payments, and payouts. You just send the art.</li>
-            <li><strong>A way to earn.</strong> A pack you finish once keeps selling and keeps paying, with no restocking or reposting.</li>
-            <li><strong>A real connection to your fans.</strong> Supporters don't just buy your work, they use it every day.</li>
-          </ul>
-        </div>
+        <dl class="reasons">
+          <div>
+            <dt>Distribution</dt>
+            <dd>Every sticker sent grows your character's brand.</dd>
+          </div>
+          <div>
+            <dt>No cost, no setup</dt>
+            <dd>We handle everything, you just send your art.</dd>
+          </div>
+          <div>
+            <dt>A way to earn</dt>
+            <dd>Finish a pack once, and it keeps selling.</dd>
+          </div>
+          <div>
+            <dt>A real connection to your fans</dt>
+            <dd>Supporters don't just buy your work, they use it every day.</dd>
+          </div>
+        </dl>
       </div>
     </section>
 
@@ -320,6 +337,7 @@
           <a href="https://instagram.com/jini.stickerbook" target="_blank" rel="noopener">Instagram</a>
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
+          <a href="artist-terms.html">Artist terms</a>
         </nav>
       </div>
       <p class="footer__legal">App Store is a service mark of Apple Inc.</p>
