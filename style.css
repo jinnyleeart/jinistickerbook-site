@@ -41,6 +41,10 @@
   --line: #E2DDD0;
   /* Pressed/hover state of a filled button, and the tint of the screenshot shadow. */
   --ink-press: #211F1C;
+
+  /* The hero lockup's slate, matching the jini_logo_3_ink_51555A asset. Sits
+     outside the ink scale on purpose — it's the logo's colour, not a text step. */
+  --brand-slate: #51555A;
   --shadow-rgb: 85, 80, 74;
 
   --display: 'Gaegu', 'Bradley Hand', cursive;
@@ -54,9 +58,13 @@
    Deliberately NOT applied to body copy or headings. This page is a document
    people read at length, and neutral text reads better than tinted text; the
    blue is worth more as punctuation than as the colour of everything. It lands
-   on the logo, links, buttons, eyebrows and step markers — small, structural,
-   repeated — so it signals "brand" and points at the CTAs instead of becoming
-   the page's default tone. */
+   on links, buttons, eyebrows and step markers — small, structural, repeated —
+   so it signals "brand" and points at the CTAs instead of becoming the page's
+   default tone.
+
+   The hero lockup is the one deliberate exception: the mark and the wordmark
+   stay slate (#51555A), so the top of the page reads as ink and the blue is
+   reserved for the things you can act on. */
 .theme-ink {
   --accent: #495C72;        /* brand blue */
   --accent-soft: #54667B;   /* lighter step, for link hover */
@@ -73,6 +81,15 @@
 /* Section eyebrows (ABOUT / TERMS / FAQ). Small, repeated, structural — they
    read as brand marking the page's divisions rather than as coloured text. */
 .theme-ink .eyebrow { color: var(--accent); }
+
+/* Subheads inside a section: the "why list with us" reasons, the numbered
+   feature titles, and the "how it works" steps. Short labels, not prose — the
+   blue reads as marking the beat of a list rather than colouring text. The h2s
+   above them and the body copy below them stay --ink-strong, so each block
+   still runs gray → blue → gray. */
+.theme-ink .reasons dt { color: var(--accent); }
+.theme-ink .feature h3 { color: var(--accent); }
+.theme-ink .steps h3 { color: var(--accent); }
 
 /* Buttons: the primary CTA is the one thing on the page that should pull the
    eye, so it carries the brand colour as a solid fill. */
@@ -110,11 +127,12 @@
 .theme-ink .split__bar i:first-child { background: var(--accent); }
 .theme-ink .split__you { color: var(--accent); }
 
-/* Hero brand name — matches the ink mark above it. */
-.theme-ink .hero h1 { color: var(--accent); }
-
-/* The hand-drawn rule under the title, in the same ink as the wordmark. */
-.theme-ink .hero__rule { color: var(--accent); }
+/* Hero lockup — deliberately NOT the accent. The mark, the wordmark and the rule
+   under them are one unit and stay slate, matching the jini_logo_3_ink_51555A
+   asset above them. Keeping the blue off the top of the page leaves it meaning
+   one thing only: this is something you can click. */
+.theme-ink .hero h1 { color: var(--brand-slate); }
+.theme-ink .hero__rule { color: var(--brand-slate); }
 
 * { box-sizing: border-box; }
 
@@ -385,9 +403,34 @@ h2 + .prose { margin-top: 18px; }
 
 /* ---------- Hero ---------- */
 
-.hero { padding: clamp(52px, 8vw, 96px) 0 clamp(56px, 7vw, 88px); }
+/* Fills the first screen. `min-height` rather than `height` so the hero can still
+   grow past the viewport if the lockup needs the room on a short screen, instead
+   of clipping. 100svh (small viewport height) keeps it from overflowing behind
+   mobile browser chrome that expands and contracts on scroll; the plain 100vh
+   above it is the fallback for browsers without svh.
 
-.hero__inner { text-align: center; }
+   The topbar is sticky, so it takes real layout space above this section — its
+   height comes off the total, otherwise header + hero would together run past
+   one screen and the badge would sit below the fold. ~57px is the measured
+   height: 11px padding twice, around a 35px small button. */
+
+/* The lockup is centred in that box, but the extra bottom padding pulls the
+   optical centre up a little — a dead-centre lockup reads low, and this leaves
+   room under the badge that hints at the section below. */
+.hero {
+  --topbar-h: 57px;
+  min-height: calc(100vh - var(--topbar-h));
+  min-height: calc(100svh - var(--topbar-h));
+  display: flex;
+  align-items: center;
+  padding: clamp(40px, 6vw, 72px) 0 clamp(96px, 14vw, 168px);
+}
+
+/* The flex child needs the full column width, since the parent is now a flex row. */
+.hero__inner {
+  text-align: center;
+  width: 100%;
+}
 
 /* Mark above the wordmark at every width. Stacked reads as a lockup — the mark
    gets the full column and can carry real size, rather than being capped by the
@@ -423,6 +466,10 @@ h2 + .prose { margin-top: 18px; }
    piece of punctuation, so it holds one size at every viewport instead of
    tracking vw. max-width keeps it inside the gutters on a very narrow screen. */
 .hero__rule {
+  /* Temporarily hidden. `visibility` rather than `display: none` so the rule
+     keeps holding the 34px gap between the wordmark and the CTA row — flip this
+     back to `visible` to bring it back. */
+  visibility: hidden;
   display: block;
   width: 280px;
   max-width: 100%;
