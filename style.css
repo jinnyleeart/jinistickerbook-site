@@ -403,10 +403,9 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   flex: none;
 }
 
-/* :not() excludes the hand-drawn ring, which is also an <img> inside the
-   badge — without it this rule outranks .hero__download on specificity and
-   squashes the drawing into a 52px square. */
-.store-badge img:not(.hero__download) {
+/* Sized by class rather than by `.store-badge img`, which would also catch the
+   hand-drawn ring and label inside the badge and squash them into 52px squares. */
+.store-badge__icon {
   height: var(--badge-size, 52px);
   width: var(--badge-size, 52px);
   display: block;
@@ -539,11 +538,30 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
    the positioning parent for the drawing.) */
 .cta-row .store-badge { z-index: 2; }
 
-/* The arrow and label hang ~242px below the badge's centre (see the geometry
-   note on .hero__download). Reserving that much, less the badge's own lower
-   half, keeps the drawing clear of the section below. Constant like the
-   drawing itself, so the vertically-centred lockup holds one height. */
-.hero .cta-row { margin-bottom: 220px; }
+/* The geometry both hero drawings are placed from. Set here, on the badge's
+   parent, so the row can use the same numbers to reserve its own space.
+
+   --art-px is one pixel of the source artwork, in CSS px. The ring and the
+   label were exported from a single 2732x2048 canvas, so one shared scale
+   reproduces the drawing exactly as it was made; every offset below is a
+   measurement off that canvas, multiplied by this.
+
+   --dl-scale shrinks the label only. It is the one knob the phone override
+   turns; the ring ignores it.
+
+   The label hangs below the badge, out of flow, so the row also has to reserve
+   the room itself or the About section would run underneath it. That reserve is
+   derived from the same constants that place the label — its bottom edge sits
+   (113.5 + 425 x scale) art-px under the badge centre — less the badge's own
+   lower half, plus 4px (10px of air, less the 6px optical nudge below). A
+   smaller label on a phone therefore reclaims the space it no longer needs. */
+.hero .cta-row {
+  --art-px: calc(var(--badge-size, 52px) * 4.35 / 504);
+  --dl-scale: 1;
+  margin-bottom: calc(
+    (113.5 + 425 * var(--dl-scale)) * var(--art-px)
+    - var(--badge-size, 52px) / 2 + 4px);
+}
 
 /* The accent strokes were drawn to sit off the logo's top-right shoulder, so
    they hang off the mark rather than taking part in the stacked lockup. */
@@ -563,72 +581,96 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   -webkit-user-select: none;
 }
 
-/* "download here" — a circle-and-arrow drawn to enclose the badge, so the
-   ring has to land ON the badge, not near it.
-
-   The badge is a fixed 52px square at every viewport (see .store-badge img),
-   so the drawing is anchored to the badge itself and sized as a fixed
-   multiple of it. Nothing here scales with the viewport: that was the bug —
-   a vw-based drawing drifted away from a badge that never moved. */
+/* "download here" — a ring drawn to enclose the badge, and an arrow pointing
+   up at it from the words below. The ring has to land ON the badge, not near
+   it, so both pieces are anchored to the badge itself. */
 .store-badge { position: relative; }
 
+.hero__ring,
 .hero__download {
-  /* Source art is 504x664px. Measured from the file, the hand-drawn ring's
-     centre sits at (191, 125) in those source pixels.
-
-     Everything below is derived arithmetically from those constants, in
-     absolute px. Deliberately NOT percentages: a percentage in `translate`
-     resolves against this element's own box, and with `height: auto` that
-     height is only known once the image has been laid out — which is what
-     made the drawing land differently on desktop than on mobile. */
-  --dl-scale: 4.35;
-  --dl-w: calc(var(--badge-size, 52px) * var(--dl-scale));       /* 226.2px */
-  --dl-h: calc(var(--dl-w) * (664 / 504));                       /* 298.0px */
-  --ring-x: calc(var(--dl-w) * (191 / 504));                     /*  85.7px */
-  --ring-y: calc(var(--dl-h) * (125 / 664));                     /*  56.1px */
-
   position: absolute;
-  /* Origin is the badge's own centre — the badge is this element's
-     positioning parent, so the two cannot drift apart. */
+  /* Origin is the badge's own centre — the badge is these elements'
+     positioning parent, so nothing here can drift away from it. */
   top: 50%;
   left: 50%;
-  width: var(--dl-w);
-  /* Explicit, so nothing depends on the image's load state. */
-  height: var(--dl-h);
-  /* Pull back by the ring's offset within the drawing, so it is the RING
-     that lands on the badge centre rather than the drawing's midpoint. */
-  /* top/left:50% already puts this element's origin at the badge's centre, so
-     pulling back by the ring's offset within the drawing is all that's needed
-     to land the ring itself there. The trailing -4px is an optical nudge: the
-     ring's ink is heavier along its lower arc, so a geometrically centred
-     ring reads as sitting slightly low. */
-  transform: translate(
-    calc(var(--ring-x) * -1),
-    calc(var(--ring-y) * -1 - 6px));
+  /* Sizes are given explicitly, in absolute px derived from --art-px, so
+     nothing depends on the image's load state and no percentage resolves
+     against a box whose height isn't known yet. That was the old bug: a
+     drawing that landed differently on desktop than on mobile. */
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
   z-index: 1;
 }
 
-/* No mobile size override: the badge is the same 52px on a phone as on a
-   desktop, so the drawing that rings it stays the same size too. Shrinking
-   it here is what pulled the ring off the badge. */
+/* The badge is a fixed 52px square at every viewport, so the ring around it is
+   a fixed multiple of it too — it never scales with the phone override. */
+.hero__ring {
+  width: calc(259 * var(--art-px));
+  height: calc(251 * var(--art-px));
+  /* Pull back by half the ring, so it is the ring's own centre that lands on
+     the badge centre. The extra -6px is optical: the ink is heavier along the
+     lower arc, so a geometrically centred ring reads as sitting slightly low
+     around the icon. */
+  transform: translate(
+    calc(-129.5 * var(--art-px)),
+    calc(-125.5 * var(--art-px) - 6px));
+}
 
-/* ---------- Screenshot / video frames (plain rectangles) ---------- */
+/* On the source canvas the arrow's tip is 118.5px left and 113.5px below the
+   ring's centre, and sits 73px in from the label's own left edge. Anchoring
+   the tip — subtracting that 73px AFTER scaling — means the label grows and
+   shrinks about the point of the arrow, so the arrow keeps pointing at the
+   same spot under the badge whatever size the label is. */
+.hero__download {
+  width: calc(504 * var(--art-px) * var(--dl-scale));
+  height: calc(425 * var(--art-px) * var(--dl-scale));
+  transform: translate(
+    calc(-118.5 * var(--art-px) - 73 * var(--art-px) * var(--dl-scale)),
+    calc(113.5 * var(--art-px) - 6px));
+}
+
+/* On a phone the label at full size dominates the fold — it ends up taller
+   than the wordmark it sits under. The ring stays put (it belongs to the
+   badge, which doesn't change size), so only the words and arrow come down. */
+@media (max-width: 480px) {
+  .hero .cta-row { --dl-scale: 0.7; }
+}
+
+/* ---------- Screenshot / video frames (hand-drawn) ---------- */
 
 /* The app's own background is --paper, so a screenshot would otherwise
-   dissolve into the page. The hairline defines the edge; the shadow keeps
-   it from reading as flat paste-up. */
+   dissolve into the page — the frame is what gives it an edge. Drawn in the
+   same ink as the rest of the page, in place of the hairline rectangle and
+   drop shadow that used to do this job: a machined edge around the artwork
+   was the one thing on the page that didn't look handmade. */
+/* The box is the screenshot itself. The frame hangs outside it, so the ink
+   never covers any part of the shot. */
 .shot {
+  position: relative;
   width: 100%;
   max-width: 290px;
   aspect-ratio: 9 / 19.5;
-  border: 1px solid var(--ink);
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--card);
-  box-shadow: 0 8px 24px rgba(var(--shadow-rgb), 0.06);
+}
+
+/* Sized so the frame's OPENING lands on the shot's edge and the whole stroke
+   sits outside it. In the art, the opening starts 17.5 of 535 units in from
+   each edge, so the frame has to be 1.07x the shot and overhang it by 3.5% of
+   the shot's width on every side.
+
+   Horizontal and vertical insets are given separately because a percentage
+   resolves against the box's width on the sides and its height on the ends —
+   1.62% of the height is the same number of pixels as 3.5% of the width on a
+   9/19.5 box, so the overhang comes out square. */
+.shot::after {
+  content: "";
+  position: absolute;
+  inset: -1.62% -3.5%;
+  /* The art is 535x1119 against a 9/19.5 box: a 3% difference in proportion,
+     which stretched to fit puts 0.2px of extra weight on the side strokes.
+     Cheaper than cropping the screenshots to suit the frame. */
+  background: url('assets/drawings/app_border.png') no-repeat center / 100% 100%;
+  pointer-events: none;
 }
 
 .shot img,
@@ -637,6 +679,10 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   height: 100%;
   object-fit: cover;
   display: block;
+  /* Matches the curve of the frame's opening — a radius of 27 units in art the
+     frame renders 1.07x the size of this box. Same horizontal/vertical pairing
+     as above, so the corner stays circular at any size. */
+  border-radius: 5.4% / 2.5%;
 }
 
 /* ---------- Feature rows (copy one side, screenshot the other) ---------- */
@@ -923,10 +969,25 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   width: 100%;
   max-width: clamp(320px, 42vw, 420px);
   /* Same reasoning as the desktop rule below — a large drawing needs more
-     travel than the copy around it to read as moving at all. No rotation at
-     this width, so the base .reveal transform picks these up directly. */
+     travel than the copy around it to read as moving at all. */
   --rev-y: 40px;
   --rev-dur: 0.85s;
+  /* The blades and the dotted line are drawn a few degrees off level, so the
+     artwork reads as slanted when laid out flat. This counter-rotation sets it
+     back upright, and is applied in both orientations. */
+  --doodle-tilt: -0.5deg;
+}
+
+/* The reveal drives `transform`, which is the same property carrying the tilt,
+   so the two are composed here rather than left to the base .reveal rule —
+   otherwise the drawing would animate to `transform: none` and land slanted.
+   The translate goes first so it stays in screen axes. */
+.steps-doodle.reveal {
+  transform: translateY(var(--rev-y, 14px)) rotate(var(--doodle-tilt));
+}
+
+.steps-doodle.reveal.is-in {
+  transform: translateY(0) rotate(var(--doodle-tilt));
 }
 
 /* Desktop: the scissors sit to the LEFT of the steps, in their own column.
@@ -968,10 +1029,11 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
     justify-self: center;
     margin: 0;
     /* Rotated so the blades point up rather than right — the column is tall and
-       narrow, which suits the upright orientation. The scale compensates for
-       the narrow layout box above: 3.43 (the drawing's aspect ratio) brings it
-       back to --doodle-size on screen. Mobile keeps the original orientation. */
-    transform: rotate(-90deg) scale(3.43);
+       narrow, which suits the upright orientation. The quarter turn carries the
+       same --doodle-tilt correction as the flat version. The scale compensates
+       for the narrow layout box above: 3.43 (the drawing's aspect ratio) brings
+       it back to --doodle-size on screen. */
+    transform: rotate(calc(-90deg + var(--doodle-tilt))) scale(3.43);
   }
 
   /* The scroll reveal drives `transform`, which is the same property holding
@@ -991,11 +1053,13 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
        page's setting for imagery rather than text. */
     --rev-travel: 40px;
     --rev-dur: 0.85s;
-    transform: translateY(var(--rev-travel, 14px)) rotate(-90deg) scale(3.43);
+    transform: translateY(var(--rev-travel, 14px))
+      rotate(calc(-90deg + var(--doodle-tilt))) scale(3.43);
   }
 
   .steps-doodle.reveal.is-in {
-    transform: translateY(0) rotate(-90deg) scale(3.43);
+    transform: translateY(0) rotate(calc(-90deg + var(--doodle-tilt)))
+      scale(3.43);
   }
 }
 
@@ -1022,18 +1086,24 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
 }
 
 /* Pointing hand, aimed at the sticker drawer in 02. Anchored bottom-right, so
-   the 20px nudges down and right come off those two edges. */
+   the pixel nudges push it down past the frame's bottom and out past its right
+   edge. */
 .feature__doodle--hand {
   --doodle-w: 84%;
   bottom: calc(22% - 30px);
-  right: calc(-44% - 30px);
+  right: calc(-44% - 20px);
 }
 
-/* Small character peeking out from behind the left edge of screenshot 03. */
+/* Small character peeking out from behind the left edge of screenshot 03.
+   The width is 30% scaled by 217/201: the art was redrawn with the raised hand
+   further out, which widened the file without moving anything else. Sizing to
+   the new width keeps the ink at the size it was drawn, and since the piece is
+   anchored by its left and bottom edges — the two the redraw left untouched —
+   the character stays put and only the hand reaches further right. */
 .feature__doodle--peek {
-  --doodle-w: 30%;
+  --doodle-w: 32.39%;
   bottom: 16%;
-  left: calc(-27% + 2px);
+  left: calc(-27% - 5px);
 }
 
 /* The drawings hang outside their media box — the plane's right edge sits
@@ -1048,8 +1118,10 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
    moves screenshot and doodle together and the composition is preserved.
 
    126px is the plane's overhang (50.6% of the 252px media box, less the 2px
-   nudge); the hand needs 111px and the peek 66px, so sizing to the plane
-   covers all three. */
+   nudge). It is the widest of the two that reach into the page margin — the
+   peek needs 74px — so sizing to the plane covers both. The hand hangs 131px
+   off its frame but its row is flipped, so that overhang goes inward, into the
+   gap beside the copy. */
 @media (min-width: 820px) {
   /* The screenshot sits at the row's right edge and the plane reaches ~126px
      past it, so the row is padded by that much: the media column moves left
@@ -1118,8 +1190,8 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
 
 /* 4 & 5 of the tuning above. The screenshot centres in the column; these shift
    the whole media box (screenshot AND its doodle together) off centre, so the
-   three stacked shots don't sit in a dead-straight line. Row 2 moves left, row
-   3 moves right.
+   three stacked shots don't sit in a dead-straight line. Rows 1 and 2 move
+   left, row 3 moves right.
 
    Offset with `left` rather than a transform: the scroll reveal animates
    `transform` and clears it to `none` on arrival, so a transform here would be
@@ -1130,8 +1202,9 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
    become two columns at 820px, where each shot has its own column and nudging
    it off centre only changes its distance from the copy beside it. */
 @media (max-width: 819px) {
+  .feature:first-child .feature__media { left: -15px; }
   .feature--flip .feature__media { left: -26px; }
-  .feature:nth-child(3) .feature__media { left: 26px; }
+  .feature:nth-child(3) .feature__media { left: 16px; }
 }
 
 /* The drawings keep their full desktop size and offsets at EVERY width — no
@@ -1157,6 +1230,25 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
    by design; this just takes the edge off how much. */
 @media (max-width: 559px) {
   .feature__media { max-width: 224px; }
+}
+
+/* The pointing hand is the one drawing that gets shrunk further, and only from
+   the width where it starts to run off the page. With the 224px media box above,
+   the hand's right edge lands exactly on the viewport edge at 410px, so below
+   that it overflows: on a 390px phone by about 10px, and by more the narrower
+   the screen. 0.87 clears that with room to spare on a 390px phone and leaves a
+   slight bleed on the narrowest ones. (Above 410px the drawing keeps its full
+   size — there is margin enough for it.)
+
+   Scaled about the fingertip: the whole point of the drawing is that it points
+   at the sticker drawer in the screenshot, so that is the one part of it that
+   must not move. 20% 38% is where the tip sits in the image file, measured from
+   its top-left. */
+@media (max-width: 409px) {
+  .feature__doodle--hand {
+    transform: scale(0.87);
+    transform-origin: 20% 38%;
+  }
 }
 
 /* ---------- The deal ---------- */
