@@ -824,6 +824,22 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   /* The eyebrow and h2 stack in the left column, drawing spans both rows. */
   .head-drawn > :not(.drawing-aside) { grid-column: 1; }
 
+  /* About's heading runs the full width of the narrow container, which would
+     strand the drawing at the right edge. It keeps the mobile arrangement
+     instead: one column, drawing under the heading. Back in flow, so it needs
+     its own margins rather than the overhang the other sections rely on. */
+  #about .head-drawn { grid-template-columns: minmax(0, 1fr); }
+
+  #about .head-drawn .drawing-aside {
+    position: static;
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+    width: var(--drawing-w, 210px);
+    margin-top: 6px;
+    margin-bottom: 12px;
+  }
+
   /* The drawing is taller than the eyebrow + h2 it sits beside. Left in flow it
      would set the row height and show up as padding above "About" and below the
      h2 — spacing that belongs to the drawing, not to the heading. Taking it out
@@ -1440,8 +1456,16 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
 /* ---------- Apply ---------- */
 
 .apply { text-align: center; }
-.apply h2 { margin-bottom: 12px; }
-.apply .lede { margin-bottom: 26px; }
+.apply h2 { margin-bottom: 14px; }
+
+.apply__note {
+  max-width: 46ch;
+  margin: 0 auto 26px;
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
 
 /* ---------- Footer ---------- */
 
