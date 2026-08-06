@@ -88,8 +88,13 @@
    above them and the body copy below them stay --ink-strong, so each block
    still runs gray → blue → gray. */
 .theme-ink .reasons dt { color: var(--accent); }
+.theme-ink .termlist dt { color: var(--accent); }
 .theme-ink .feature h3 { color: var(--accent); }
 .theme-ink .steps h3 { color: var(--accent); }
+
+/* The "Hi, i'm James!" opener. A short greeting rather than prose — the accent
+   marks it as the start of the about copy, the same way it marks a subhead. */
+.theme-ink .greeting { color: var(--accent); }
 
 /* Buttons: the primary CTA is the one thing on the page that should pull the
    eye, so it carries the brand colour as a solid fill. */
@@ -229,13 +234,23 @@ a:hover { color: var(--ink-soft); }
 h2 + .prose { margin-top: 18px; }
 .prose-center { margin-left: auto; margin-right: auto; }
 
+/* The opening hello in the about copy. Carries the same weight as <strong>,
+   which is the page's existing emphasis step for body text. */
+.greeting { font-weight: 600; }
+
+/* The "Your art, in everyday conversations." heading needs its own gap before
+   the drawing + reasons block, so the two don't read as one run of text.
+   Tightened on desktop (see the 860px block) — there the drawing sits in its
+   own column, so less air is needed than in the stacked mobile layout. */
+h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
+
 /* Stacked reasons under "Why list with us" — heading above, line below. */
 .reasons {
-  margin: 28px 0 0;
+  margin: 0;
   max-width: 42ch;
 }
 
-.reasons > div + div { margin-top: 22px; }
+.reasons > div + div { margin-top: clamp(17px, 2.2vw, 23px); }
 
 .reasons dt {
   font-family: var(--sans);
@@ -375,14 +390,25 @@ h2 + .prose { margin-top: 18px; }
 
 /* ---------- App Store icon ---------- */
 
+/* Block, not inline-block: as an inline-block the box picked up baseline slack
+   from the line box, so its height differed between the flex .cta-row (desktop)
+   and the grid one (<=460px). The hero drawing is positioned against this box,
+   so that difference moved the drawing between the two layouts. Sized
+   explicitly to the icon, it is the same 52px square in both. */
 .store-badge {
-  display: inline-block;
+  display: block;
   line-height: 0;
+  width: var(--badge-size, 52px);
+  height: var(--badge-size, 52px);
+  flex: none;
 }
 
-.store-badge img {
-  height: 52px;
-  width: 52px;
+/* :not() excludes the hand-drawn ring, which is also an <img> inside the
+   badge — without it this rule outranks .hero__download on specificity and
+   squashes the drawing into a 52px square. */
+.store-badge img:not(.hero__download) {
+  height: var(--badge-size, 52px);
+  width: var(--badge-size, 52px);
   display: block;
 }
 
@@ -506,6 +532,89 @@ h2 + .prose { margin-top: 18px; }
   .hero h1 { font-size: min(12.5vw, 46px); }
 }
 
+/* ---------- Hero drawings ---------- */
+
+/* The badge stays above the hand-drawn ring and keeps its own hit area.
+   (position: relative comes from the .store-badge rule below, which makes it
+   the positioning parent for the drawing.) */
+.cta-row .store-badge { z-index: 2; }
+
+/* The arrow and label hang ~242px below the badge's centre (see the geometry
+   note on .hero__download). Reserving that much, less the badge's own lower
+   half, keeps the drawing clear of the section below. Constant like the
+   drawing itself, so the vertically-centred lockup holds one height. */
+.hero .cta-row { margin-bottom: 220px; }
+
+/* The accent strokes were drawn to sit off the logo's top-right shoulder, so
+   they hang off the mark rather than taking part in the stacked lockup. */
+.hero__mark {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.hero__accent {
+  position: absolute;
+  top: -6%;
+  right: -26%;
+  width: 28%;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* "download here" — a circle-and-arrow drawn to enclose the badge, so the
+   ring has to land ON the badge, not near it.
+
+   The badge is a fixed 52px square at every viewport (see .store-badge img),
+   so the drawing is anchored to the badge itself and sized as a fixed
+   multiple of it. Nothing here scales with the viewport: that was the bug —
+   a vw-based drawing drifted away from a badge that never moved. */
+.store-badge { position: relative; }
+
+.hero__download {
+  /* Source art is 504x664px. Measured from the file, the hand-drawn ring's
+     centre sits at (191, 125) in those source pixels.
+
+     Everything below is derived arithmetically from those constants, in
+     absolute px. Deliberately NOT percentages: a percentage in `translate`
+     resolves against this element's own box, and with `height: auto` that
+     height is only known once the image has been laid out — which is what
+     made the drawing land differently on desktop than on mobile. */
+  --dl-scale: 4.35;
+  --dl-w: calc(var(--badge-size, 52px) * var(--dl-scale));       /* 226.2px */
+  --dl-h: calc(var(--dl-w) * (664 / 504));                       /* 298.0px */
+  --ring-x: calc(var(--dl-w) * (191 / 504));                     /*  85.7px */
+  --ring-y: calc(var(--dl-h) * (125 / 664));                     /*  56.1px */
+
+  position: absolute;
+  /* Origin is the badge's own centre — the badge is this element's
+     positioning parent, so the two cannot drift apart. */
+  top: 50%;
+  left: 50%;
+  width: var(--dl-w);
+  /* Explicit, so nothing depends on the image's load state. */
+  height: var(--dl-h);
+  /* Pull back by the ring's offset within the drawing, so it is the RING
+     that lands on the badge centre rather than the drawing's midpoint. */
+  /* top/left:50% already puts this element's origin at the badge's centre, so
+     pulling back by the ring's offset within the drawing is all that's needed
+     to land the ring itself there. The trailing -4px is an optical nudge: the
+     ring's ink is heavier along its lower arc, so a geometrically centred
+     ring reads as sitting slightly low. */
+  transform: translate(
+    calc(var(--ring-x) * -1),
+    calc(var(--ring-y) * -1 - 6px));
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 1;
+}
+
+/* No mobile size override: the badge is the same 52px on a phone as on a
+   desktop, so the drawing that rings it stays the same size too. Shrinking
+   it here is what pulled the ring off the badge. */
+
 /* ---------- Screenshot / video frames (plain rectangles) ---------- */
 
 /* The app's own background is --paper, so a screenshot would otherwise
@@ -581,12 +690,473 @@ h2 + .prose { margin-top: 18px; }
 .feature__media .shot { max-width: none; }
 
 @media (min-width: 820px) {
-  .feature { grid-template-columns: minmax(0, 1fr) minmax(0, 330px); column-gap: clamp(40px, 5vw, 72px); }
+  /* Copy and screenshot sit next to each other with a fixed gap, and the row's
+     spare width is pushed to the OUTSIDE by justify-content rather than left
+     in a column between them. Sizing the copy column to max-content alone
+     wasn't enough: the paragraph is capped at 46ch by .feature__copy p, so any
+     leftover row width still opened up as a gap on whichever side the slack
+     landed. */
+  .feature {
+    grid-template-columns: minmax(0, max-content) minmax(0, 252px);
+    column-gap: clamp(76px, 8vw, 116px);
+    justify-content: start;
+  }
 
-  /* Even rows mirror, so the screenshots zig-zag down the page. */
-  .feature--flip { grid-template-columns: minmax(0, 330px) minmax(0, 1fr); }
+  .feature__copy { grid-column: 1; }
+  .feature__media { grid-column: 2; }
+
+  /* Even rows mirror, so the screenshots zig-zag down the page. The pair is
+     pushed to the right edge so the screenshots still alternate sides.
+
+     A much wider gap than the normal rows: on a flipped row the doodle hangs
+     off the screenshot's RIGHT edge, i.e. straight into the copy column, so
+     the gap has to clear the drawing rather than just separate two blocks. */
+  .feature--flip {
+    grid-template-columns: minmax(0, 252px) minmax(0, max-content);
+    column-gap: clamp(124px, 13vw, 200px);
+    justify-content: end;
+  }
+
   .feature--flip .feature__media { grid-column: 1; grid-row: 1; }
   .feature--flip .feature__copy { grid-column: 2; grid-row: 1; }
+}
+
+/* ---------- Hand-drawn spot illustrations ----------
+
+   Three placement patterns, all built on one base class:
+     .drawing              — the image itself, never interactive, never selectable
+     .drawing-aside        — sits beside a block on desktop, above it on mobile
+     .drawing-mark         — small, rides alongside a section heading
+     .feature__doodle      — absolutely positioned against a .shot
+
+   Every drawing is decorative: alt="" so screen readers skip it, and
+   aria-hidden on the wrappers that exist only to position one. */
+
+.drawing {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* The art is dark ink on transparent; on the light paper it needs no
+     treatment, but it must never catch a click meant for the copy below. */
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* --- Pattern 1: drawing beside the section heading (about) ---
+
+   The copy keeps its original full width; only the heading row is split, so
+   the drawing sits to the right of "Built for artists." and the paragraphs
+   below run the same measure they always did.
+
+   Mobile: the drawing drops under the heading and above the copy. */
+
+.head-drawn {
+  display: grid;
+  align-items: center;
+  gap: clamp(10px, 2vw, 18px);
+  /* Containing block for the absolutely-positioned drawing on desktop. */
+  position: relative;
+}
+
+.head-drawn .drawing-aside {
+  justify-self: center;
+  width: 100%;
+  max-width: var(--drawing-w, 210px);
+}
+
+@media (min-width: 860px) {
+  /* The heading column is sized to its text (max-content) rather than 1fr, so
+     the drawing sits immediately beside "Built for artists." instead of being
+     pushed to the container's right edge by a stretched column. */
+  .head-drawn {
+    grid-template-columns: max-content minmax(0, var(--drawing-col, 250px));
+    column-gap: clamp(24px, 4vw, 48px);
+    justify-content: start;
+  }
+
+  /* The eyebrow and h2 stack in the left column, drawing spans both rows. */
+  .head-drawn > :not(.drawing-aside) { grid-column: 1; }
+
+  /* The drawing is taller than the eyebrow + h2 it sits beside. Left in flow it
+     would set the row height and show up as padding above "About" and below the
+     h2 — spacing that belongs to the drawing, not to the heading. Taking it out
+     of flow removes it from the row's height calculation, so the heading block
+     keeps its natural size and the drawing overhangs the copy below instead of
+     pushing it down. */
+  .head-drawn .drawing-aside {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: var(--drawing-justify, start);
+    align-self: center;
+    position: absolute;
+    width: var(--drawing-w, 210px);
+    max-width: none;
+    /* Per-section vertical nudge, since the art's own balance point isn't
+       always the centre of the heading block it sits beside. Done with
+       margin-top rather than a transform (the reveal sets `transform: none`
+       on [data-stagger] children once they animate in) and rather than `top`
+       (a length there would cancel the align-self centring above). */
+    margin-top: var(--drawing-shift, 0);
+  }
+
+  /* A small breath under the heading — not the large gap the out-of-flow
+     drawing used to force, just enough to separate heading from copy. */
+  .head-drawn + .prose { margin-top: clamp(8px, 1vw, 13px); }
+
+  /* Terms: the jar is ~230px against a ~71px heading, so with the tightened
+     gap below it crosses into the top of the list. It rides in front of
+     everything it reaches — the hairline rules and the term text included —
+     so the drawing reads as sitting on top of the page rather than being
+     interrupted by it. */
+  .head-drawn:has(+ .termlist) .drawing-aside { z-index: 2; }
+}
+
+/* --- Pattern 2: drawing left, list right (why list with us, terms) ---
+
+   The section heading stays full-width above; below it the drawing takes the
+   left column and the definition list the right.
+
+   Mobile: heading, then drawing, then list — the requested order. */
+
+.split-drawing { display: grid; gap: clamp(18px, 3vw, 28px); }
+
+.split-drawing .drawing-aside {
+  justify-self: center;
+  width: 100%;
+  max-width: var(--drawing-w, 230px);
+}
+
+@media (min-width: 860px) {
+  .split-drawing {
+    grid-template-columns: minmax(0, var(--drawing-col, 300px)) minmax(0, 1fr);
+    column-gap: var(--split-gap, clamp(36px, 5vw, 72px));
+    align-items: var(--split-align, center);
+  }
+
+  .split-drawing .drawing-aside {
+    grid-column: 1;
+    max-width: none;
+  }
+
+  .split-drawing > :not(.drawing-aside) { grid-column: 2; }
+
+  /* In the split the list owns its column, so the standalone measure cap and
+     the top margin that spaced it under a heading both come off. */
+  .split-drawing .reasons { max-width: none; margin-top: 0; }
+
+  /* A touch less air under the heading than the stacked mobile layout needs. */
+  h2 + .split-drawing { margin-top: clamp(20px, 2.4vw, 30px); }
+}
+
+/* Mirrored: content left, drawing right (terms). */
+@media (min-width: 860px) {
+  .split-drawing--right {
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--drawing-col, 300px));
+  }
+
+  /* Both children are pinned to row 1. Without that, the drawing comes first
+     in source and auto-places into row 1 of its column, pushing the list down
+     into row 2 — the drawing ends up stacked above the list instead of beside
+     it. Source order stays drawing-first so mobile still reads heading →
+     drawing → list. */
+  .split-drawing--right .drawing-aside { grid-column: 2; grid-row: 1; }
+  .split-drawing--right > :not(.drawing-aside) { grid-column: 1; grid-row: 1; }
+
+  /* The list lost width to the drawing column, so the term labels get a
+     narrower gutter to keep the descriptions on sensible line lengths. */
+  .split-drawing .termlist > div { grid-template-columns: 180px minmax(0, 1fr); }
+  .split-drawing .termlist { margin-top: 0; }
+}
+
+/* --- Pattern 3: a mark riding alongside a heading (faq) --- */
+
+.section-head--drawn { display: grid; align-items: center; }
+
+/* The FAQ headline is meant to hold one line beside its drawing; the column
+   is narrow, so the heading is allowed to overflow it rather than wrap. */
+@media (min-width: 860px) {
+  .section-head--nowrap h2 { white-space: nowrap; }
+}
+
+.section-head--drawn .drawing-mark {
+  justify-self: center;
+  width: 100%;
+  max-width: var(--mark-w, 260px);
+  margin-top: clamp(16px, 3vw, 24px);
+}
+
+@media (min-width: 860px) {
+  .section-head--drawn {
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--mark-col, 300px));
+    column-gap: clamp(28px, 4vw, 56px);
+  }
+
+  .section-head--drawn > :not(.drawing-mark) { grid-column: 1; }
+
+  .section-head--drawn .drawing-mark {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: var(--mark-justify, center);
+    /* Size and position are separate knobs. The mark's column (--mark-col) sets
+       where it starts; without a cap of its own the image would simply fill
+       that column, so widening the column to pull the drawing closer to the
+       heading would also enlarge it. --mark-max caps the drawing independently,
+       leaving --mark-col free to act as pure positioning. Defaults to none, so
+       heads that don't set it behave as before. */
+    max-width: var(--mark-max, none);
+    /* The mark centers across the eyebrow + headline rows, which leaves it
+       hanging below the headline. --mark-shift lifts it back into line.
+       This has to be margin rather than a transform: the scroll-reveal sets
+       `transform: none` on landing, which would wipe out a translate and drop
+       the mark back down at the end of its animation. */
+    margin-top: calc(-1 * var(--mark-shift, 0px));
+  }
+}
+
+/* Mobile: the scissors sit under the section heading and above the steps, so
+   the reading order is heading → drawing → steps. Centered in the column via
+   the auto side margins. */
+.steps-doodle {
+  display: block;
+  margin: clamp(18px, 2.6vw, 28px) auto clamp(24px, 3.4vw, 36px);
+  width: 100%;
+  max-width: clamp(320px, 42vw, 420px);
+  /* Same reasoning as the desktop rule below — a large drawing needs more
+     travel than the copy around it to read as moving at all. No rotation at
+     this width, so the base .reveal transform picks these up directly. */
+  --rev-y: 40px;
+  --rev-dur: 0.85s;
+}
+
+/* Desktop: the scissors sit to the LEFT of the steps, in their own column.
+
+   This is a real two-column grid rather than the absolutely-positioned pin the
+   right-hand version used. Pinning worked there because the 700px content cap
+   already left the right side of the container empty — the drawing dropped
+   into space nothing else wanted. There is no such free space on the left, so
+   the steps have to give up width for the drawing to sit beside them, and a
+   grid is the honest way to express that. */
+/* 1000px, matching the old right-hand placement: below this the two columns
+   leave the copy too narrow, so the drawing stays stacked under the heading. */
+@media (min-width: 1000px) {
+  /* Opts OUT of the parent's 700px child cap so the wrapper spans the full
+     container and both columns have room; the steps get their own cap from the
+     grid track instead. */
+  .container--narrow > .steps-doodle-wrap { max-width: none; }
+
+  /* The drawing's column is sized to the scissors' rotated WIDTH (--doodle-size
+     is the upright drawing's height, i.e. the unrotated long edge). Rotation
+     does not change an element's box, so an img laid out at its full unrotated
+     width would leave ~200px of dead space either side of the upright artwork.
+     Instead the img's box is laid out NARROW — at the rotated width — and
+     scaled back up to --doodle-size by the transform. Box and artwork then
+     match, so there is no dead space and nothing overflows the container. */
+  .steps-doodle-wrap {
+    display: grid;
+    grid-template-columns:
+      calc(var(--doodle-size, 265px) / 3.43) minmax(0, 1fr);
+    column-gap: var(--doodle-gap, clamp(24px, 3vw, 48px));
+    align-items: center;
+  }
+
+  /* Source order is drawing-then-steps, which is also the column order, so
+     neither child needs an explicit placement. */
+  .steps-doodle {
+    width: calc(var(--doodle-size, 265px) / 3.43);
+    max-width: none;
+    justify-self: center;
+    margin: 0;
+    /* Rotated so the blades point up rather than right — the column is tall and
+       narrow, which suits the upright orientation. The scale compensates for
+       the narrow layout box above: 3.43 (the drawing's aspect ratio) brings it
+       back to --doodle-size on screen. Mobile keeps the original orientation. */
+    transform: rotate(-90deg) scale(3.43);
+  }
+
+  /* The scroll reveal drives `transform`, which is the same property holding
+     the rotation above — left alone it would animate to `transform: none` and
+     drop the scissors flat and unscaled at the end of the reveal. So the
+     reveal's offset is composed with the rotation here instead.
+
+     The translate goes BEFORE the rotation so it stays in screen axes: written
+     after, it would be rotated too, and a translateY would slide the scissors
+     sideways rather than up. Transforms apply right-to-left, so the drawing is
+     rotated and scaled first, then moved down the screen by --rev-travel and
+     eased back to 0. */
+  .steps-doodle.reveal {
+    /* Travels further and slower than the steps beside it: it is a large
+       standalone drawing, and at the copy's 22px the motion barely registers
+       against its size. Closer to the showcase's 38px/0.85s, which is the
+       page's setting for imagery rather than text. */
+    --rev-travel: 40px;
+    --rev-dur: 0.85s;
+    transform: translateY(var(--rev-travel, 14px)) rotate(-90deg) scale(3.43);
+  }
+
+  .steps-doodle.reveal.is-in {
+    transform: translateY(0) rotate(-90deg) scale(3.43);
+  }
+}
+
+/* --- Pattern 3: doodles overlapping the app screenshots --- */
+
+/* Establishes the box the doodles position against. */
+.feature__media { position: relative; }
+
+.feature__doodle {
+  position: absolute;
+  width: var(--doodle-w, 40%);
+  z-index: 2;
+}
+
+/* The screenshots are a fixed 252px at every width, so these percentages
+   resolve to the same physical size on desktop and mobile alike — no
+   per-breakpoint resizing needed. */
+
+/* Paper plane, flying in over the top-right corner of screenshot 01. */
+.feature__doodle--plane {
+  --doodle-w: 174%;
+  top: calc(-11% + 12px);
+  right: calc(-50.6% + 2px);
+}
+
+/* Pointing hand, aimed at the sticker drawer in 02. Anchored bottom-right, so
+   the 20px nudges down and right come off those two edges. */
+.feature__doodle--hand {
+  --doodle-w: 84%;
+  bottom: calc(22% - 30px);
+  right: calc(-44% - 30px);
+}
+
+/* Small character peeking out from behind the left edge of screenshot 03. */
+.feature__doodle--peek {
+  --doodle-w: 30%;
+  bottom: 16%;
+  left: calc(-27% + 2px);
+}
+
+/* The drawings hang outside their media box — the plane's right edge sits
+   ~126px past it — and the box ends flush with the container, so that overhang
+   spills into the page margin. Above ~1272px the margin is wide enough on its
+   own. Below that, the row is pulled in from the container's edge by exactly
+   the shortfall, which buys the overhang its room without moving the drawing
+   relative to the screenshot it annotates.
+
+   Padding on the row rather than a negative margin on the drawing: the drawing
+   is absolutely positioned against .feature__media, so shifting the media box
+   moves screenshot and doodle together and the composition is preserved.
+
+   126px is the plane's overhang (50.6% of the 252px media box, less the 2px
+   nudge); the hand needs 111px and the peek 66px, so sizing to the plane
+   covers all three. */
+@media (min-width: 820px) {
+  /* The screenshot sits at the row's right edge and the plane reaches ~126px
+     past it, so the row is padded by that much: the media column moves left
+     by the overhang and the drawing ends flush with the row instead of
+     hanging outside it. Padding on the row (not a negative margin on the
+     drawing) keeps screenshot and doodle moving together, since the doodle is
+     positioned against .feature__media.
+
+     A flat value rather than one derived from the viewport: the copy column is
+     max-content, so the row's own edge is not a fixed distance from the page
+     edge and a computed shortfall under-corrected in the 830-950px band. */
+  .feature:not(.feature--flip) { padding-right: 126px; }
+
+  /* Flipped rows put the screenshot on the left and the hand overhangs to its
+     right — into the gap beside the copy, not the page margin — so the row
+     needs no extra room. */
+}
+
+/* ---------- Mobile tuning for the drawings ----------
+
+   Single-column territory: every drawing sits in the flow between its heading
+   and the content below, so the adjustments here are all spacing and nudges.
+   Scoped to <=859px, one below the point where the two-column drawing layouts
+   engage, so none of it can reach the desktop composition. */
+@media (max-width: 859px) {
+  /* 1. Tighten ABOUT -> "Built for artists." */
+  #about .head-drawn { gap: 4px; }
+
+  /* 2. A little more air either side of the about-me drawing. */
+  #about .head-drawn .drawing-aside {
+    margin-top: 14px;
+    margin-bottom: 18px;
+  }
+
+  /* 3. Separation between each screenshot and the copy above it. Row 1 needs
+        the most: its plane hangs above the phone frame (top: -11%), so the gap
+        has to clear the drawing rather than the screenshot. Rows 2 and 3 have
+        their drawings low on the frame, so they need less. */
+  .feature__media { margin-top: 26px; }
+  .feature--flip .feature__media,
+  .feature:nth-child(3) .feature__media { margin-top: 14px; }
+
+  /* 4 & 5. See the single-column block below — those two live at a tighter
+     breakpoint than the rest of this one. */
+
+  /* 6. Scissors: slightly smaller, slightly more room beneath. */
+  .steps-doodle {
+    max-width: clamp(290px, 38vw, 380px);
+    margin-bottom: clamp(32px, 4.2vw, 44px);
+  }
+
+  /* 7. A touch more air either side of the FAQ drawing. */
+  .section-head--drawn .drawing-mark {
+    margin-top: clamp(22px, 3.8vw, 30px);
+    margin-bottom: clamp(8px, 1.6vw, 14px);
+  }
+
+  /* 8. The jar's ink sits right of its own centre, so centring the file leaves
+        it looking pushed right under the heading. Nudged back with `left`, not
+        a transform — the reveal clears transforms to `none` on arrival. */
+  #deal .head-drawn .drawing-aside {
+    position: relative;
+    left: -18px;
+  }
+}
+
+/* 4 & 5 of the tuning above. The screenshot centres in the column; these shift
+   the whole media box (screenshot AND its doodle together) off centre, so the
+   three stacked shots don't sit in a dead-straight line. Row 2 moves left, row
+   3 moves right.
+
+   Offset with `left` rather than a transform: the scroll reveal animates
+   `transform` and clears it to `none` on arrival, so a transform here would be
+   overwritten — the box would slide sideways to centre as it came in instead of
+   rising straight up like row 1, and the offset would be lost.
+
+   Capped at 819px, not 859px like the rest of the tuning: the feature rows
+   become two columns at 820px, where each shot has its own column and nudging
+   it off centre only changes its distance from the copy beside it. */
+@media (max-width: 819px) {
+  .feature--flip .feature__media { left: -26px; }
+  .feature:nth-child(3) .feature__media { left: 26px; }
+}
+
+/* The drawings keep their full desktop size and offsets at EVERY width — no
+   mobile scaling. On a 390px phone the screenshot is a fixed 252px, leaving
+   only ~69px of margin per side against the plane's 126px overhang, so a
+   drawing that fits inside the viewport is necessarily a smaller drawing. The
+   deliberate choice here is the other way round: keep the composition and let
+   the artwork bleed off the page edge.
+
+   The section clips instead of scrolling. `overflow-x: clip` rather than
+   `hidden` because hidden would make the section a scroll container, which
+   also breaks `position: sticky` on the topbar; clip just cuts the overflow.
+   The x-only value leaves vertical overflow alone, so nothing interferes with
+   the reveal transforms. */
+#proof {
+  overflow-x: clip;
+}
+
+/* Phones scale the whole unit — screenshot AND its drawing — down a little.
+   Shrinking .feature__media is all it takes: the doodles are sized and offset
+   in percentages OF that box, so they follow it exactly and the composition is
+   preserved at the smaller size. The artwork still bleeds off the page edge,
+   by design; this just takes the edge off how much. */
+@media (max-width: 559px) {
+  .feature__media { max-width: 224px; }
 }
 
 /* ---------- The deal ---------- */
@@ -641,6 +1211,11 @@ h2 + .prose { margin-top: 18px; }
 /* ---------- Terms list ---------- */
 
 .termlist { margin: clamp(40px, 5vw, 60px) 0 0; }
+
+/* Following a drawn heading, the heading block already carries its own bottom
+   margin, so the list's default top margin stacks into a gap far larger than
+   either was meant to be. */
+.head-drawn + .termlist { margin-top: clamp(20px, 2.5vw, 30px); }
 
 .termlist > div {
   display: grid;
@@ -857,6 +1432,7 @@ h2 + .prose { margin-top: 18px; }
 
 @media (prefers-reduced-motion: no-preference) {
   .hero__icon,
+  .hero__accent,
   .hero h1,
   .hero__rule,
   .hero .cta-row {
@@ -864,6 +1440,9 @@ h2 + .prose { margin-top: 18px; }
   }
 
   .hero__icon { animation-delay: 0.06s; }
+  /* Just behind the mark it hangs off, so the strokes read as landing on the
+     logo rather than arriving with it. */
+  .hero__accent { animation-delay: 0.14s; }
   .hero h1 { animation-delay: 0.16s; }
   .hero__rule { animation-delay: 0.26s; }
   .hero .cta-row { animation-delay: 0.34s; }

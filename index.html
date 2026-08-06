@@ -48,7 +48,10 @@
     <section class="hero">
       <div class="container hero__inner">
         <div class="hero__title">
-          <img class="hero__icon" src="assets/jini_logo_3_ink_51555A.png" alt="" />
+          <span class="hero__mark">
+            <img class="hero__icon" src="assets/jini_logo_3_ink_51555A.png" alt="" />
+            <img class="hero__accent" src="assets/drawings/landing_page_logo_accent.png" alt="" aria-hidden="true" />
+          </span>
           <h1>jini stickerbook</h1>
         </div>
 
@@ -69,6 +72,10 @@
           <!-- TODO: swap href="#" for your App Store URL. -->
           <a class="store-badge" href="#" aria-label="Download on the App Store">
             <img src="assets/app-store-icon-51555A.png" alt="Download on the App Store" />
+            <!-- Hand-drawn ring + arrow. Must live INSIDE the badge: it is
+                 positioned against it, so the badge has to be its containing
+                 block. Decorative — the badge carries the accessible label. -->
+            <img class="hero__download" src="assets/drawings/landing_page_download_here.png" alt="" aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -77,16 +84,25 @@
     <!-- ============ ABOUT ============ -->
     <section class="section band" id="about">
       <div class="container container--narrow" data-stagger>
-        <p class="eyebrow">About</p>
-        <h2>Built for artists.</h2>
+        <!-- Only the heading row is split, so the prose below keeps the full
+             column width it had before. On mobile the drawing drops between
+             the heading and the copy. -->
+        <div class="head-drawn" style="--drawing-col: 230px; --drawing-w: 200px;">
+          <p class="eyebrow">About</p>
+          <h2>Built for artists.</h2>
+          <img class="drawing drawing-aside" src="assets/drawings/about_me_asset.png" alt="" aria-hidden="true" />
+        </div>
         <div class="prose">
-          <p>Hi, I'm James. I'm an artist, and I built jini stickerbook to give independent artists a place to share their stickers and earn from their work.</p>
+          <p><span class="greeting">Hi, i'm James!</span> I'm an artist, and I built jini stickerbook to give independent artists a place to share their stickers and earn from their work.</p>
           <p>Most sticker apps don't pay creators at all and block users behind a subscription paywall. I wanted to build something that works for both sides: artists get paid for what they make, and people get stickers they actually connect with.</p>
         </div>
 
         <p class="eyebrow eyebrow--restart">Why list with us</p>
         <h2>Your art, in everyday conversations.</h2>
-        <dl class="reasons">
+        <!-- Drawing left, reasons right. Mobile stacks them in source order. -->
+        <div class="split-drawing" style="--drawing-col: 260px; --drawing-w: 225px;">
+          <img class="drawing drawing-aside" src="assets/drawings/why_list_asset.png" alt="" aria-hidden="true" />
+          <dl class="reasons">
           <div>
             <dt>Distribution</dt>
             <dd>Every sticker sent grows your character's brand.</dd>
@@ -103,7 +119,8 @@
             <dt>A real connection to your fans</dt>
             <dd>Supporters don't just buy your work, they use it every day.</dd>
           </div>
-        </dl>
+          </dl>
+        </div>
       </div>
     </section>
 
@@ -126,6 +143,7 @@
               <div class="shot">
                 <img src="assets/proof-pack.png" alt="A sticker pack listing in the jini stickerbook app, showing the artist's name and a grid of their stickers" />
               </div>
+              <img class="drawing feature__doodle feature__doodle--plane" src="assets/drawings/your_pack_goes_on_sale_asset.png" alt="" aria-hidden="true" />
             </div>
           </li>
 
@@ -139,6 +157,7 @@
               <div class="shot">
                 <img src="assets/proof-send.png" alt="An iMessage conversation with stickers sent alongside the messages, and the sticker drawer open below" />
               </div>
+              <img class="drawing feature__doodle feature__doodle--hand" src="assets/drawings/see_it_in_action_in_your_drawer_asset.png" alt="" aria-hidden="true" />
             </div>
           </li>
 
@@ -152,6 +171,7 @@
               <div class="shot">
                 <img src="assets/proof-artist.png" alt="An artist page in the app, with the artist's name, location, links, and their sticker packs" />
               </div>
+              <img class="drawing feature__doodle feature__doodle--peek" src="assets/drawings/see_it_in_action_artist_page.png" alt="" aria-hidden="true" />
             </div>
           </li>
         </ol>
@@ -165,6 +185,15 @@
           <p class="eyebrow">How it works</p>
           <h2>Four steps, and we do the tedious ones.</h2>
         </div>
+
+        <!-- Scissors cutting a dotted line, echoing "we cut the files" in the
+             last step. Mobile: under the heading, above the steps. Desktop: the
+             wrapper becomes a two-column grid with the drawing on the left and
+             the steps on the right. Source order is drawing-then-steps, which
+             serves both: it is the column order on desktop and keeps the
+             drawing above the steps when stacked. -->
+        <div class="steps-doodle-wrap">
+        <img class="drawing steps-doodle reveal" src="assets/drawings/steps_scissors.png" alt="" aria-hidden="true" />
 
         <ol class="steps" data-stagger="100">
           <li>
@@ -187,15 +216,19 @@
             <p>We cut the files to Apple's sticker spec, it goes live with your name on it.</p>
           </li>
         </ol>
+        </div>
       </div>
     </section>
 
     <!-- ============ THE DEAL ============ -->
     <section class="section" id="deal">
       <div class="container">
-        <div class="section-head" data-stagger="130">
+        <!-- Jar-of-coins beside the heading; the list below keeps full width.
+             On mobile the drawing drops between the heading and the list. -->
+        <div class="section-head section-head--flush head-drawn" data-stagger="130" style="--drawing-col: 265px; --drawing-w: 225px; --drawing-shift: 4px;">
           <p class="eyebrow">Terms</p>
           <h2>You keep the art, and most of the money.</h2>
+          <img class="drawing drawing-aside" src="assets/drawings/terms_asset.png" alt="" aria-hidden="true" />
         </div>
 
         <dl class="termlist" data-stagger="55">
@@ -238,9 +271,10 @@
     <!-- ============ FAQ ============ -->
     <section class="section band" id="faq">
       <div class="container container--narrow">
-        <div class="section-head" data-stagger="130">
+        <div class="section-head section-head--drawn section-head--nowrap section-head--flush" data-stagger="130" style="--mark-col: 235px; --mark-w: 215px; --mark-max: 200px; --mark-justify: start; --mark-shift: 39px;">
           <p class="eyebrow">FAQ</p>
           <h2>The questions we'd ask too.</h2>
+          <img class="drawing drawing-mark" src="assets/drawings/faq_asset.png" alt="" aria-hidden="true" />
         </div>
 
         <div class="faq" data-stagger="55">
