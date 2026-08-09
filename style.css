@@ -28,7 +28,7 @@
 
 :root {
   /* Surfaces, pulled from DesignSystem.swift. */
-  --paper: #F9F5ED;
+  --paper: #FBF8F2;
   --card: #FFFEF9;
 
   /* Text ink. Warm grays rather than neutral: the paper is a cream, and a
