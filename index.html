@@ -20,7 +20,6 @@
   <link rel="apple-touch-icon" href="assets/jini_logo_3_495C72_1024.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="assets/fonts/PhrenSans-Rg.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
   <noscript>
     <style>
@@ -31,6 +30,7 @@
 </head>
 <body>
 
+  <div class="fold">
   <header class="topbar" id="topbar">
     <div class="container topbar__inner">
       <nav class="topbar__nav" aria-label="Sections">
@@ -38,52 +38,61 @@
         <a href="#deal">Terms</a>
         <a href="#faq">FAQ</a>
       </nav>
-      <!-- FORM HIDDEN (1 of 4): nav CTA. Restore this line to bring back the
-           Tally form; see the matching FORM HIDDEN notes below.
       <a class="btn btn--primary btn--sm" href="#apply">Join us</a>
-      -->
     </div>
   </header>
 
-  <main>
-
     <!-- ============ HERO ============ -->
     <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__title">
-          <span class="hero__mark">
-            <img class="hero__icon" src="assets/jini_logo_3_ink_51555A.png" alt="" />
-            <img class="hero__accent" src="assets/drawings/landing_page_logo_accent.png" alt="" aria-hidden="true" />
-          </span>
-          <h1>jini stickerbook</h1>
+      <div class="container hero__layout">
+        <div class="hero__inner">
+          <h1 class="hero__title">
+            <span class="hero__mark">
+              <img class="hero__icon" src="assets/light-mark.png" alt="" />
+              <img class="hero__accent" src="assets/drawings/landing_page_logo_accent.png" alt="" aria-hidden="true" />
+            </span>
+            <span class="hero__wordmark">jini stickerbook</span>
+          </h1>
+          <div class="cta-row">
+            <a class="store-badge" href="https://apps.apple.com/us/app/jini-stickerbook-stickers/id6784808935" aria-label="Download jini stickerbook on the App Store">
+              <img class="store-badge__icon" src="assets/app-store-badge.svg" alt="Download on the App Store" />
+            </a>
+          </div>
         </div>
 
-        <!-- Port of DottedDivider.swift: two dots, a hand-drawn wobbled line, two dots.
-             The path is the same curve the app generates (same seed, jitter 0.32,
-             6pt step), baked to a viewBox so it needs no script. -->
-        <svg class="hero__rule" viewBox="0 0 316 6" fill="none" aria-hidden="true" preserveAspectRatio="none">
-          <circle cx="2" cy="3" r="2" fill="currentColor" />
-          <circle cx="11" cy="3" r="2" fill="currentColor" />
-          <path d="M1.5 3.32Q7.5 3.34 10.5 3.01Q13.5 2.68 16.5 2.85Q19.5 3.02 22.5 2.95Q25.5 2.88 28.5 2.77Q31.5 2.66 34.5 2.8Q37.5 2.94 40.5 3.13Q43.5 3.33 46.5 3.23Q49.5 3.13 52.5 2.99Q55.5 2.86 58.5 2.71Q61.5 2.56 64.5 2.6Q67.5 2.63 70.5 2.81Q73.5 2.98 76.5 2.86Q79.5 2.75 82.5 2.66Q85.5 2.56 88.5 2.75Q91.5 2.94 94.5 3.19Q97.5 3.44 100.5 3.33Q103.5 3.21 106.5 2.97Q109.5 2.73 112.5 2.78Q115.5 2.84 118.5 2.83Q121.5 2.83 124.5 2.76Q127.5 2.7 130.5 2.83Q133.5 2.97 136.5 2.89Q139.5 2.81 142.5 2.97Q145.5 3.14 148.5 3.05Q151.5 2.96 154.5 2.8Q157.5 2.64 160.5 2.81Q163.5 2.97 166.5 2.9Q169.5 2.84 172.5 2.82Q175.5 2.8 178.5 2.94Q181.5 3.08 184.5 3.18Q187.5 3.27 190.5 3Q193.5 2.73 196.5 2.77Q199.5 2.8 202.5 2.98Q205.5 3.17 208.5 3.2Q211.5 3.23 214.5 3.31Q217.5 3.38 220.5 3.39Q223.5 3.4 226.5 3.17Q229.5 2.95 232.5 2.79Q235.5 2.64 238.5 2.8Q241.5 2.95 244.5 3.06Q247.5 3.17 250.5 3.2Q253.5 3.24 256.5 3.01Q259.5 2.78 262.5 3.05Q265.5 3.33 268.5 2.97Q271.5 2.6 274.5 2.89Q277.5 3.17 278 3.28L278.5 3.38"
-                transform="translate(18 0)" stroke="currentColor" stroke-width="3"
-                stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
-          <circle cx="305" cy="3" r="2" fill="currentColor" />
-          <circle cx="314" cy="3" r="2" fill="currentColor" />
-        </svg>
-        <div class="cta-row">
-          <a class="store-badge" href="https://apps.apple.com/us/app/jini-stickerbook-stickers/id6784808935" aria-label="Download jini stickerbook on the App Store">
-            <img class="store-badge__icon" src="assets/app-store-icon-51555A.png" alt="Download on the App Store" />
-            <!-- Ring and label are two files so they can be sized independently:
-                 the ring has to stay locked to the badge it encloses, while the
-                 label shrinks on a phone. Both must live INSIDE the badge: they
-                 are positioned against it, so the badge has to be their
-                 containing block. Decorative — the badge carries the label. -->
-            <img class="hero__ring" src="assets/drawings/landing_page_circle.png" alt="" aria-hidden="true" />
-            <img class="hero__download" src="assets/drawings/landing_page_download_here.png" alt="" aria-hidden="true" />
-          </a>
+        <!-- Three shots under the lockup from 860px up, sitting on the fold.
+             Below that, the homepage shot only. -->
+        <div class="hero__previews">
+          <div class="hero__preview">
+            <img
+              src="assets/discover_stickers_screenshot2.png"
+              width="1242"
+              height="2688"
+              alt="The jini stickerbook home screen: Discover stickers from real artists"
+            />
+          </div>
+          <div class="hero__preview">
+            <img
+              src="assets/send_anywhere_screenshot2.png"
+              width="1242"
+              height="2688"
+              alt="Send anywhere from your keyboard: stickers in an iMessage conversation"
+            />
+          </div>
+          <div class="hero__preview">
+            <img
+              src="assets/every_download_screenshot2.png"
+              width="1242"
+              height="2688"
+              alt="Every download supports artists: an artist page with sticker packs"
+            />
+          </div>
         </div>
       </div>
     </section>
+  </div>
+
+  <main>
 
     <!-- ============ ABOUT ============ -->
     <section class="section band" id="about">
@@ -156,7 +165,7 @@
             <div class="feature__copy">
               <span class="feature__num" aria-hidden="true">02</span>
               <h3>In their drawer, in every chat</h3>
-              <p>When someone buys your pack, your stickers land in their Messages drawer. One tap to send.</p>
+              <p>When someone buys your pack, they can send it wherever they chat (iMessage, WhatsApp, and more).</p>
             </div>
             <div class="feature__media">
               <div class="shot">
@@ -203,13 +212,11 @@
         <ol class="steps" data-stagger="100">
           <li>
             <h3>Get in touch</h3>
-            <!-- FORM HIDDEN (2 of 4): was a link to the Tally form. Restore:
-                 <p><a href="https://tally.so/r/RGl8Lp" target="_blank" rel="noopener">Fill out a short form</a> with a link to your work.</p> -->
-            <p><a href="mailto:hello@jinistickerbook.com">Email us</a> with a link to your work.</p>
+            <p><a href="https://tally.so/r/RGl8Lp" target="_blank" rel="noopener">Fill out a short form</a> with a link to your work.</p>
           </li>
           <li>
             <h3>We talk</h3>
-            <p>We'll write back within a couple of days, usually with a few questions and what happens next.</p>
+            <p>We'll write back within a few days, with details on what happens next.</p>
           </li>
           <li>
             <h3>Send your stickers</h3>
@@ -251,10 +258,6 @@
           <div>
             <dt>Paid monthly</dt>
             <dd>One payout a month, with a statement of what sold.</dd>
-          </div>
-          <div>
-            <dt>You approve everything</dt>
-            <dd>Nothing ships until you've signed off on it.</dd>
           </div>
           <div>
             <dt>Leave anytime</dt>
@@ -349,14 +352,10 @@
     <section class="section section--tight" id="apply">
       <div class="container">
         <div class="apply" data-stagger="100">
-          <h2>We'd love to see your work.</h2>
-          <!-- FORM HIDDEN (3 of 4): note read "Fill out a short form and we'll
-               reach out shortly." -->
-          <p class="apply__note">Send us a note and we'll reach out shortly.</p>
+          <h2>Join us.</h2>
+          <p class="apply__note">Fill out a short form and we'll reach out shortly.</p>
           <div class="btn-row btn-row--center">
-            <!-- FORM HIDDEN (4 of 4): was a link to the Tally form. Restore:
-                 <a class="btn btn--primary btn--lg" href="https://tally.so/r/RGl8Lp" target="_blank" rel="noopener">Join us</a> -->
-            <a class="btn btn--primary btn--lg" href="mailto:hello@jinistickerbook.com">Get in touch</a>
+            <a class="btn btn--primary btn--lg" href="https://tally.so/r/RGl8Lp" target="_blank" rel="noopener">Get started here</a>
           </div>
         </div>
       </div>
@@ -382,6 +381,14 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const pinTop = () => {
+      if (location.hash) return;
+      if (window.scrollY < 180) window.scrollTo(0, 0);
+    };
+    pinTop();
+    addEventListener('pageshow', pinTop);
 
     const topbar = document.getElementById('topbar');
     const onScroll = () => topbar.classList.toggle('is-stuck', window.scrollY > 8);
