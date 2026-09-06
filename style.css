@@ -387,16 +387,23 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   display: block;
   line-height: 0;
   flex: none;
+  background: var(--paper);
+  padding: 5px;
+  /* Inner lockup is ~8px at Apple's 40px art; scale with the displayed
+     height and add the padding so the white ring follows the same curve. */
+  border-radius: 13px;
+  /* Accent sits outside the paper padding, so it doesn't eat into the ring. */
+  box-shadow: 0 0 0 6px var(--accent);
 }
 
 .store-badge__icon {
   display: block;
-  height: 46px;
+  height: 36px;
   width: auto;
 }
 
 @media (min-width: 860px) {
-  .store-badge__icon { height: 48px; }
+  .store-badge__icon { height: 42px; }
 }
 
 .cta-row {
@@ -460,10 +467,13 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
+  gap: 32px;
   padding: 14px 0 0;
   min-width: 0;
   width: 100%;
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .hero__title {
@@ -500,12 +510,12 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
    paper, so it keeps its own proportions rather than filling a square. */
 .hero__icon {
   flex: none;
-  width: 104px;
+  width: 124px;
   height: auto;
   display: block;
 }
 
-.hero .cta-row { display: flex; justify-content: center; margin-bottom: 0; }
+.hero .cta-row { display: flex; justify-content: center; margin-bottom: 0; pointer-events: auto; }
 
 /* Fills whatever the lockup leaves. The homepage shot (and the desktop
    row) sit on the fold; overflow clips anything that would run past it. */
@@ -527,7 +537,7 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   align-items: flex-end;
   overflow: hidden;
   width: 100%;
-  padding: 28px 28px 0;
+  padding: 24px 28px 0;
 }
 
 /* Extra hero shots are a desktop row; keep the phone hero as one screenshot. */
@@ -552,15 +562,15 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
 @media (min-width: 860px) {
   .hero__layout {
     grid-template-rows: minmax(0, 1fr) auto;
-    row-gap: 20px;
+    row-gap: 0;
   }
 
   .hero__inner {
     flex-direction: column;
-    justify-content: center;
-    gap: 32px;
+    justify-content: flex-end;
+    gap: 40px;
     height: 100%;
-    padding: 16px 0 12px;
+    padding: 16px 0 0;
     width: auto;
     min-height: 0;
     overflow: visible;
@@ -569,7 +579,11 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   .hero__icon { width: 132px; }
 
   .hero__previews {
-    gap: clamp(12px, 1.6vw, 24px);
+    /* Between the original halfway hang and the last nudge up. */
+    margin-top: -24px;
+    /* Extra air between shots on a wide screen; collapses to nothing by
+       the 860px breakpoint so the gap goes first, then the layout switches. */
+    gap: clamp(0px, calc((100vw - 860px) / 10), 40px);
     width: auto;
   }
 
@@ -584,6 +598,21 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   .hero__preview img {
     max-width: min(262px, calc((100vw - 88px) / 3));
     max-height: calc(100svh - 242px);
+  }
+}
+
+/* Phone: hang the App Store badge halfway over the screenshot. The shot
+   fills the rest of the fold so its top edge meets the badge's midline
+   (29px, half of the 36px lockup plus its 5px paper ring and 6px accent)
+   instead of sitting in a gap below it. */
+@media (max-width: 859px) {
+  .hero__previews { margin-top: -29px; }
+
+  .hero__preview { padding-top: 0; }
+
+  .hero__preview img {
+    height: 100%;
+    max-width: 100%;
   }
 }
 
