@@ -551,6 +551,11 @@ h2 + .split-drawing { margin-top: clamp(28px, 4vw, 44px); }
   object-fit: contain;
   object-position: bottom;
   display: block;
+  /* Equal px radii so the curve stays circular as the shot scales; a %
+     radius would stretch with the image's height. Bottoms stay square
+     because they clip off the fold. */
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
   /* Transparent PNG corners would otherwise composite against a filter
      backing-store (a gray rectangle). Paint the page colour behind them
      instead, and skip drop-shadow — it was the source of that halo. */
