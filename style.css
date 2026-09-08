@@ -20,8 +20,8 @@
   /* Pressed/hover state of a filled button, and the tint of the screenshot shadow. */
   --ink-press: #211F1C;
 
-  /* The hero lockup's slate, matching the jini_logo_3_ink_51555A asset. Sits
-     outside the ink scale on purpose — it's the logo's colour, not a text step. */
+  /* The hero lockup's slate, matching the app icon. Sits outside the ink
+     scale on purpose — it's the logo's colour, not a text step. */
   --brand-slate: #51555A;
   --shadow-rgb: 85, 80, 74;
 
