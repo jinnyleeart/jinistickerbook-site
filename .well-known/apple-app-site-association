@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["B6359VCNWW.com.jinnylee.StickerHostApp"],
+        "components": [{ "/": "/p/*", "comment": "Pack QR links: /p/<pack id>?c=<campaign>" }]
+      }
+    ]
+  }
+}
